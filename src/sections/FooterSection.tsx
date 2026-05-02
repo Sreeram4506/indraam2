@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
@@ -9,9 +9,6 @@ export default function FooterSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const text1Ref = useRef<HTMLDivElement>(null);
-  const text2Ref = useRef<HTMLDivElement>(null);
-  const text3Ref = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const rafRef = useRef<number>(0);
 
@@ -58,7 +55,6 @@ export default function FooterSection() {
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 
-    let scrollProgress = 0;
     let time = 0;
 
     // SINGLE MARQUEE ANIMATION LOGIC
@@ -78,7 +74,6 @@ export default function FooterSection() {
       end: 'bottom bottom',
       scrub: true,
       onUpdate: (self) => { 
-        scrollProgress = self.progress;
         // Directional marquee
         const dir = self.direction === 1 ? 1 : -1;
         gsap.to(tween1, { timeScale: dir, duration: 0.5, overwrite: true });

@@ -126,7 +126,7 @@ const ParticleText: React.FC<ParticleTextProps> = ({
       lastMouseRef.current.x = mouseRef.current.x;
       lastMouseRef.current.y = mouseRef.current.y;
 
-      particlesRef.current.forEach((p, i) => {
+      particlesRef.current.forEach((p) => {
         if (!isEntering) {
           const dx = mouseRef.current.x - p.x;
           const dy = mouseRef.current.y - p.y;

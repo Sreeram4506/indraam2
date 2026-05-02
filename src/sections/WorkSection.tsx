@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -131,6 +131,8 @@ export default function WorkSection() {
         const content = el.querySelector('.project-content');
         const num = el.querySelector('.project-num');
         const button = el.querySelector('.project-button');
+
+        if (!videoContainer || !video || !content || !num || !button) return;
 
         // 1. 3D Tilt reveal for video container - NOW SCRUBBED
         gsap.fromTo(videoContainer,
