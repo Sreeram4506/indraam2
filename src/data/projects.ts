@@ -33,9 +33,9 @@ export const projects = [
   },
   {
     num: '05',
-    title: 'Smart Inventory',
-    category: 'LOGISTICS / AUTOMATION',
-    description: 'Autonomous inventory management systems utilizing computer vision and predictive analytics to optimize supply chains in real-time.',
+    title: 'Auto Profit Hub',
+    category: 'FINTECH / AUTOMATION',
+    description: 'A comprehensive vehicle lifecycle management system featuring AI-powered document parsing, real-time inventory analytics, and automated document registries.',
     video: 'https://assets.mixkit.co/videos/preview/mixkit-circuit-board-running-digital-data-processing-4401-large.mp4',
     color: '#F2CC8F' // Saffron accent
   },
