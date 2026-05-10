@@ -16,12 +16,14 @@ interface ParticleTextProps {
   text: string;
   fontSize?: number;
   active?: boolean;
+  align?: 'left' | 'center' | 'right';
 }
 
 const ParticleText: React.FC<ParticleTextProps> = ({ 
   text, 
   fontSize = 100,
-  active = true 
+  active = true,
+  align = 'center'
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -38,8 +40,10 @@ const ParticleText: React.FC<ParticleTextProps> = ({
     if (!ctx) return;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // Use offset dimensions to match the actual rendered size
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
       initParticles();
     };
 
@@ -58,9 +62,14 @@ const ParticleText: React.FC<ParticleTextProps> = ({
       }
 
       ctx.fillStyle = 'white';
-      ctx.textAlign = 'center';
+      ctx.textAlign = align;
       ctx.textBaseline = 'middle';
-      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+      
+      let xPos = canvas.width / 2;
+      if (align === 'left') xPos = 0;
+      if (align === 'right') xPos = canvas.width;
+      
+      ctx.fillText(text, xPos, canvas.height / 2);
 
       const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
       const gap = 2;
@@ -191,8 +200,11 @@ const ParticleText: React.FC<ParticleTextProps> = ({
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      mouseRef.current.x = e.clientX;
-      mouseRef.current.y = e.clientY;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = e.clientX - rect.left;
+      mouseRef.current.y = e.clientY - rect.top;
     };
 
     const onMouseLeave = () => {
@@ -221,8 +233,8 @@ const ParticleText: React.FC<ParticleTextProps> = ({
   return (
     <canvas 
       ref={canvasRef} 
-      className="fixed inset-0 w-full h-full pointer-events-none z-50" 
-      style={{ touchAction: 'none' }}
+      className="w-full h-full pointer-events-none z-0" 
+      style={{ touchAction: 'none', display: 'block' }}
     />
   );
 };

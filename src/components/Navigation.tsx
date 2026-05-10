@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLocation, useNavigate } from 'react-router';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +14,8 @@ export default function Navigation({ visible }: NavigationProps) {
   const centerLogoRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -81,6 +84,10 @@ export default function Navigation({ visible }: NavigationProps) {
 
   const scrollTo = (id: string) => {
     setMenuOpen(false);
+    if (location.pathname !== '/') {
+      navigate('/#' + id);
+      return;
+    }
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -106,7 +113,7 @@ export default function Navigation({ visible }: NavigationProps) {
           {navItems.slice(0, 2).map((item) => (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.id)}
+              onClick={() => scrollTo(item.id!)}
               className={`relative font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-300 ${
                 activeSection === item.id
                   ? 'text-saffron'
@@ -135,7 +142,7 @@ export default function Navigation({ visible }: NavigationProps) {
           {navItems.slice(2).map((item) => (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.id)}
+              onClick={() => scrollTo(item.id!)}
               className={`relative font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-300 ${
                 activeSection === item.id
                   ? 'text-saffron'
@@ -180,7 +187,7 @@ export default function Navigation({ visible }: NavigationProps) {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.id)}
+              onClick={() => scrollTo(item.id!)}
               className={`font-display text-4xl transition-colors duration-300 ${
                 activeSection === item.id ? 'text-saffron' : 'text-parchment hover:text-saffron'
               }`}

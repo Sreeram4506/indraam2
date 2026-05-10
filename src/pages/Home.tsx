@@ -19,6 +19,18 @@ export default function Home() {
     // Refresh ScrollTrigger after immediate mount
     ScrollTrigger.refresh();
     
+    // Check for hash and scroll
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+
     // Some components might need a slight delay to measure layout
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();

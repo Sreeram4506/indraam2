@@ -31,4 +31,12 @@ export const projects = [
     video: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-animation-of-a-white-cube-31688-large.mp4',
     color: '#CAD2C5' // Fog accent
   },
+  {
+    num: '05',
+    title: 'Smart Inventory',
+    category: 'LOGISTICS / AUTOMATION',
+    description: 'Autonomous inventory management systems utilizing computer vision and predictive analytics to optimize supply chains in real-time.',
+    video: 'https://assets.mixkit.co/videos/preview/mixkit-circuit-board-running-digital-data-processing-4401-large.mp4',
+    color: '#F2CC8F' // Saffron accent
+  },
 ];
