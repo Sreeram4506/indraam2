@@ -5,8 +5,7 @@ import {
   Eye,
   Layout,
   Mic,
-  Database,
-  AlertCircle
+  Database
 } from 'lucide-react';
 
 const InteractiveGraph: React.FC = () => {
@@ -33,7 +32,7 @@ const InteractiveGraph: React.FC = () => {
       { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.5)" }
     );
 
-    nodesRef.current.forEach((node, i) => {
+    nodesRef.current.forEach((node) => {
       if (node) {
         tl.fromTo(node,
           { scale: 0, opacity: 0 },
@@ -44,7 +43,7 @@ const InteractiveGraph: React.FC = () => {
     });
   }, []);
 
-  const handleNodeHover = (id: string) => {
+  const handleNodeHover = (_id: string) => {
     // We could trigger specific line glow here if needed
   };
 
@@ -58,7 +57,7 @@ const InteractiveGraph: React.FC = () => {
       {/* SVG Connections */}
       <svg className="absolute top-1/2 left-1/2 overflow-visible pointer-events-none">
         {/* Draw lines from center to outer nodes */}
-        {nodes.map((node, i) => {
+        {nodes.map((node) => {
           const x = (node.distance) * Math.cos((node.angle * Math.PI) / 180);
           const y = (node.distance) * Math.sin((node.angle * Math.PI) / 180);
           
@@ -129,7 +128,7 @@ const InteractiveGraph: React.FC = () => {
         return (
           <div
             key={node.id}
-            ref={el => nodesRef.current[i] = el}
+            ref={el => { nodesRef.current[i] = el; }}
             style={{ 
               transform: `translate(${x}px, ${y}px)`,
             }}
