@@ -11,57 +11,43 @@ interface NavigationProps {
 
 export default function Navigation({ visible }: NavigationProps) {
   const navRef = useRef<HTMLElement>(null);
-  const centerLogoRef = useRef<HTMLButtonElement>(null);
+  const logoRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Nav entrance
   useEffect(() => {
-    if (!navRef.current) return;
-    if (visible) {
-      gsap.to(navRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-      });
-    }
+    if (!navRef.current || !visible) return;
+    gsap.to(navRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: 'power3.out',
+    });
   }, [visible]);
 
-  // Logo Transition Logic
+  // Logo shrink on scroll
   useEffect(() => {
-    if (!centerLogoRef.current) return;
+    if (!logoRef.current) return;
 
-    // Initial state: centered and large (matching hero style)
-    gsap.set(centerLogoRef.current, {
-        y: '40vh',
-        scale: 8,
-        opacity: 0,
-        filter: 'blur(10px)',
-    });
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: 'body',
-            start: 'top top',
-            end: '500px top',
-            scrub: 1,
+    const st = ScrollTrigger.create({
+      trigger: 'body',
+      start: 'top top',
+      end: '300px top',
+      onUpdate: (self) => {
+        const p = self.progress;
+        setScrolled(p > 0.1);
+        if (logoRef.current) {
+          const scale = 1 - p * 0.15;
+          logoRef.current.style.transform = `scale(${scale})`;
         }
+      },
     });
 
-    tl.to(centerLogoRef.current, {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        filter: 'blur(0px)',
-        ease: 'power2.inOut'
-    });
-
-    return () => {
-        if (tl.scrollTrigger) tl.scrollTrigger.kill();
-        tl.kill();
-    };
+    return () => st.kill();
   }, []);
 
   // Track active section
@@ -77,9 +63,7 @@ export default function Navigation({ visible }: NavigationProps) {
       });
     });
 
-    return () => {
-      observers.forEach((o) => o.kill());
-    };
+    return () => { observers.forEach((o) => o.kill()); };
   }, []);
 
   const scrollTo = (id: string) => {
@@ -104,7 +88,9 @@ export default function Navigation({ visible }: NavigationProps) {
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 right-0 z-50 opacity-0 -translate-y-2"
+      className={`fixed top-0 left-0 right-0 z-50 opacity-0 -translate-y-2 transition-all duration-500 ${
+        scrolled ? 'bg-obsidian/80 backdrop-blur-xl border-b border-white/5' : ''
+      }`}
       style={{ padding: '0 5vw' }}
     >
       <div className="flex items-center justify-between h-20 relative">
@@ -113,24 +99,24 @@ export default function Navigation({ visible }: NavigationProps) {
           {navItems.slice(0, 2).map((item) => (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.id!)}
-              className={`relative font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-300 ${
+              onClick={() => scrollTo(item.id)}
+              className={`relative font-mono text-[10px] uppercase tracking-[0.14em] transition-all duration-300 group ${
                 activeSection === item.id
                   ? 'text-saffron'
-                  : 'text-fog hover:text-parchment'
+                  : 'text-fog/50 hover:text-parchment'
               }`}
             >
               {item.label}
-              {activeSection === item.id && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-saffron rounded-full" />
-              )}
+              <span className={`absolute -bottom-1.5 left-0 h-[1px] bg-saffron transition-all duration-500 ${
+                activeSection === item.id ? 'w-full' : 'w-0 group-hover:w-full'
+              }`} />
             </button>
           ))}
         </div>
 
-        {/* Center Logo - Animated from Hero */}
+        {/* Center Logo */}
         <button
-          ref={centerLogoRef}
+          ref={logoRef}
           onClick={() => scrollTo('hero')}
           className="absolute left-1/2 -translate-x-1/2 font-display text-lg tracking-[0.3em] text-parchment hover:text-saffron transition-colors duration-300 pointer-events-auto"
         >
@@ -142,61 +128,81 @@ export default function Navigation({ visible }: NavigationProps) {
           {navItems.slice(2).map((item) => (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.id!)}
-              className={`relative font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-300 ${
+              onClick={() => scrollTo(item.id)}
+              className={`relative font-mono text-[10px] uppercase tracking-[0.14em] transition-all duration-300 group ${
                 activeSection === item.id
                   ? 'text-saffron'
-                  : 'text-fog hover:text-parchment'
+                  : 'text-fog/50 hover:text-parchment'
               }`}
             >
               {item.label}
-              {activeSection === item.id && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-saffron rounded-full" />
-              )}
+              <span className={`absolute -bottom-1.5 left-0 h-[1px] bg-saffron transition-all duration-500 ${
+                activeSection === item.id ? 'w-full' : 'w-0 group-hover:w-full'
+              }`} />
             </button>
           ))}
         </div>
 
-        {/* Mobile Spacer (to keep button on right) */}
+        {/* Mobile Spacer */}
         <div className="md:hidden flex-1" />
 
+        {/* Mobile menu button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden relative w-6 h-4 flex flex-col justify-between"
+          className="md:hidden relative w-7 h-5 flex flex-col justify-between z-[60]"
         >
           <span
-            className={`block w-full h-px bg-parchment transition-all duration-300 ${
-              menuOpen ? 'rotate-45 translate-y-[7px]' : ''
+            className={`block w-full h-[1px] bg-parchment transition-all duration-500 origin-left ${
+              menuOpen ? 'rotate-45 translate-x-[1px] w-[28px]' : ''
             }`}
           />
           <span
-            className={`block w-full h-px bg-parchment transition-opacity duration-300 ${
-              menuOpen ? 'opacity-0' : ''
+            className={`block h-[1px] bg-parchment transition-all duration-300 ${
+              menuOpen ? 'opacity-0 w-0' : 'w-3/4'
             }`}
           />
           <span
-            className={`block w-full h-px bg-parchment transition-all duration-300 ${
-              menuOpen ? '-rotate-45 -translate-y-[7px]' : ''
+            className={`block w-full h-[1px] bg-parchment transition-all duration-500 origin-left ${
+              menuOpen ? '-rotate-45 translate-x-[1px] w-[28px]' : ''
             }`}
           />
         </button>
       </div>
 
-      {menuOpen && (
-        <div className="md:hidden fixed inset-0 top-20 bg-obsidian/95 backdrop-blur-sm flex flex-col items-center justify-center gap-8">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollTo(item.id!)}
-              className={`font-display text-4xl transition-colors duration-300 ${
-                activeSection === item.id ? 'text-saffron' : 'text-parchment hover:text-saffron'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
+      {/* Mobile Menu */}
+      <div className={`md:hidden fixed inset-0 bg-obsidian/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-2 transition-all duration-700 ${
+        menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}>
+        {navItems.map((item, i) => (
+          <button
+            key={item.id}
+            onClick={() => scrollTo(item.id)}
+            className={`font-display text-[clamp(36px,10vw,56px)] tracking-wider transition-all duration-500 ${
+              activeSection === item.id ? 'text-saffron' : 'text-parchment/60 hover:text-parchment'
+            }`}
+            style={{
+              transitionDelay: menuOpen ? `${i * 80}ms` : '0ms',
+              transform: menuOpen ? 'translateY(0)' : 'translateY(40px)',
+              opacity: menuOpen ? 1 : 0,
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+
+        <div className="mt-12 flex flex-col items-center gap-3" style={{
+          transitionDelay: menuOpen ? '400ms' : '0ms',
+          opacity: menuOpen ? 1 : 0,
+          transition: 'opacity 0.5s ease',
+        }}>
+          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/40">
+            hello@indraam.com
+          </span>
+          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-fog/30">
+            Est. 2026 // US Based
+          </span>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

@@ -6,41 +6,57 @@ import HeroSection from '../sections/HeroSection';
 import PhilosophySection from '../sections/PhilosophySection';
 import ServicesSection from '../sections/ServicesSection';
 import WorkSection from '../sections/WorkSection';
+import ContactSection from '../sections/ContactSection';
 import FooterSection from '../sections/FooterSection';
 import CustomCursor from '../components/CustomCursor';
+import Preloader from '../components/Preloader';
 
 export default function Home() {
-  const [preloaderDone] = useState(true);
-  const [entranceComplete] = useState(true);
+  const [preloaderDone, setPreloaderDone] = useState(false);
+  const [entranceComplete, setEntranceComplete] = useState(false);
 
   useLenis();
 
   useEffect(() => {
-    // Refresh ScrollTrigger after immediate mount
-    ScrollTrigger.refresh();
-    
+    if (preloaderDone) {
+      // Trigger entrance animations after preloader
+      setTimeout(() => {
+        setEntranceComplete(true);
+        ScrollTrigger.refresh();
+      }, 100);
+
+      // Refresh again after layout settles
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 800);
+
+      return () => clearTimeout(timer);
+    }
+  }, [preloaderDone]);
+
+  useEffect(() => {
     // Check for hash and scroll
-    const hash = window.location.hash;
-    if (hash) {
-      const id = hash.replace('#', '');
-      const el = document.getElementById(id);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+    if (entranceComplete) {
+      const hash = window.location.hash;
+      if (hash) {
+        const id = hash.replace('#', '');
+        const el = document.getElementById(id);
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }, 300);
+        }
       }
     }
-
-    // Some components might need a slight delay to measure layout
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  }, [entranceComplete]);
 
   return (
     <div className="relative bg-obsidian text-parchment">
+      {/* Preloader */}
+      {!preloaderDone && (
+        <Preloader onComplete={() => setPreloaderDone(true)} />
+      )}
+
       <CustomCursor />
       <div className="noise-overlay" />
       <Navigation visible={preloaderDone} />
@@ -50,6 +66,7 @@ export default function Home() {
         <PhilosophySection />
         <ServicesSection />
         <WorkSection />
+        <ContactSection />
         <FooterSection />
       </main>
     </div>

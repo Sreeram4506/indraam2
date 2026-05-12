@@ -69,6 +69,7 @@
 }
 
 @layer components {
+  /* Typography */
   .font-display {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
@@ -94,14 +95,7 @@
     letter-spacing: 0.08em;
   }
 
-  .section-index {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    color: var(--fog);
-  }
-
+  /* Color utilities */
   .text-parchment { color: var(--parchment); }
   .text-saffron { color: var(--saffron); }
   .text-terracotta { color: var(--terracotta); }
@@ -111,8 +105,10 @@
   .bg-obsidian { background-color: var(--obsidian); }
   .bg-parchment { background-color: var(--parchment); }
   .bg-night { background-color: var(--night); }
+  .bg-ink { background-color: var(--ink); }
   .border-fog { border-color: var(--fog); }
 
+  /* Noise overlay */
   .noise-overlay {
     position: fixed;
     top: 0;
@@ -120,33 +116,58 @@
     width: 100%;
     height: 100%;
     background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.04;
+    opacity: 0.03;
     pointer-events: none;
     z-index: 9999;
   }
 
-  .glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  /* Grid background */
+  .bg-grid {
+    background-size: 60px 60px;
+    background-image: 
+      linear-gradient(to right, rgba(244, 241, 222, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(244, 241, 222, 0.02) 1px, transparent 1px);
   }
 
+  /* Glassmorphism */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  /* Perspective */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  /* Animations */
   @keyframes pulse-glow {
     0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.2); }
+    50% { opacity: 1; transform: scale(1.15); }
   }
 
   .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+    animation: pulse-glow 2.5s ease-in-out infinite;
   }
 
-  .text-reveal {
-    overflow: hidden;
+  @keyframes scroll-line {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
   }
 
-  .text-reveal span {
-    display: inline-block;
+  .animate-scroll-line {
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 3s ease-in-out infinite;
   }
 
   @keyframes scan {
@@ -158,37 +179,6 @@
     animation: scan 8s linear infinite;
   }
 
-  @keyframes bounce-slow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(10px); }
-  }
-
-  .animate-bounce-slow {
-    animation: bounce-slow 3s ease-in-out infinite;
-  }
-
-  .animate-bounce-slow {
-    animation: bounce-slow 3s ease-in-out infinite;
-  }
-
-  .perspective-1000 {
-    perspective: 1000px;
-  }
-
-  .bg-ink {
-    background-color: var(--ink);
-  }
-
-  /* Improved glassmorphism for service cards */
-  .service-card {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    transition: box-shadow 0.5s ease;
-  }
-
-  .service-card:hover {
-    box-shadow: 0 35px 60px -15px rgba(242, 204, 143, 0.05);
-  }
-
   @keyframes marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
@@ -196,10 +186,6 @@
 
   .animate-marquee {
     animation: marquee 40s linear infinite;
-  }
-
-  .hover\:pause:hover {
-    animation-play-state: paused;
   }
 
   @keyframes glitch {
@@ -215,15 +201,71 @@
     animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
   }
 
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-8px) rotate(1deg); }
+    66% { transform: translateY(4px) rotate(-1deg); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(242, 204, 143, 0.1) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  /* Transition timing */
   .ease-expo {
     transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  .bg-grid {
-    background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(244, 241, 222, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(244, 241, 222, 0.03) 1px, transparent 1px);
+  /* Service card shadows */
+  .service-card {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.5s ease;
+  }
+
+  .service-card:hover {
+    box-shadow: 0 35px 60px -15px rgba(242, 204, 143, 0.05);
+  }
+
+  .hover\:pause:hover {
+    animation-play-state: paused;
+  }
+
+  /* Smooth image/video loading */
+  img, video {
+    transition: filter 0.5s ease, opacity 0.5s ease;
+  }
+
+  /* Focus styles */
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--obsidian);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(242, 204, 143, 0.15);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(242, 204, 143, 0.3);
   }
 }
-

@@ -1,294 +1,247 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const text1Ref = useRef<HTMLDivElement>(null);
-  const text2Ref = useRef<HTMLDivElement>(null);
-  const text3Ref = useRef<HTMLDivElement>(null);
-  const contactRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const rafRef = useRef<number>(0);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const infoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const canvas = canvasRef.current;
-    if (!section || !canvas) return;
+    if (!section) return;
 
-    // Three.js particle setup
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a0a);
-
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      100
-    );
-    camera.position.z = 30;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    rendererRef.current = renderer;
-
-    // Create particles in a vortex shape - Reduced for mobile performance
-    const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 1500 : 3000;
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-    const originalPositions = new Float32Array(particleCount * 3);
-
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 2 + Math.random() * 15;
-      const height = (Math.random() - 0.5) * 10;
-
-      positions[i3] = Math.cos(angle) * radius;
-      positions[i3 + 1] = height;
-      positions[i3 + 2] = Math.sin(angle) * radius;
-
-      originalPositions[i3] = positions[i3];
-      originalPositions[i3 + 1] = positions[i3 + 1];
-      originalPositions[i3 + 2] = positions[i3 + 2];
-
-      velocities[i3] = 0;
-      velocities[i3 + 1] = 0;
-      velocities[i3 + 2] = 0;
-    }
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const material = new THREE.PointsMaterial({
-      color: 0xf4f1de,
-      size: isMobile ? 0.2 : 0.15,
-      transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending,
-      sizeAttenuation: true,
-    });
-
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
-
-    let scrollProgress = 0;
-    let time = 0;
-
-    const st = ScrollTrigger.create({
-      trigger: section,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: true,
-      onUpdate: (self) => {
-        scrollProgress = self.progress;
-      },
-    });
-
-    function animate() {
-      rafRef.current = requestAnimationFrame(animate);
-      time += 0.01;
-
-      const posArray = geometry.attributes.position.array as Float32Array;
-      const chaos = scrollProgress * 3;
-
-      // Phase-based text visibility - Smoother mobile transitions
-      if (text1Ref.current) {
-        const opacity = scrollProgress < 0.33 ? 1 - scrollProgress * 3.5 : 0;
-        const y = scrollProgress < 0.33 ? -scrollProgress * 60 : -60;
-        text1Ref.current.style.opacity = String(Math.max(0, opacity));
-        text1Ref.current.style.transform = `translateY(${y}px)`;
-      }
-      if (text2Ref.current) {
-        const opacity =
-          scrollProgress > 0.25 && scrollProgress < 0.66
-            ? 1 - Math.abs(scrollProgress - 0.45) * 4
-            : 0;
-        const y =
-          scrollProgress > 0.25 && scrollProgress < 0.66
-            ? (scrollProgress - 0.45) * -60
-            : scrollProgress >= 0.66
-            ? -60
-            : 60;
-        text2Ref.current.style.opacity = String(Math.max(0, opacity));
-        text2Ref.current.style.transform = `translateY(${y}px)`;
-      }
-      if (text3Ref.current) {
-        const opacity = scrollProgress > 0.55 ? (scrollProgress - 0.55) * 2.5 : 0;
-        const y = scrollProgress > 0.55 ? (1 - scrollProgress) * -20 : 30;
-        text3Ref.current.style.opacity = String(Math.min(1, opacity));
-        text3Ref.current.style.transform = `translateY(${y}px)`;
-      }
-      if (contactRef.current) {
-        const opacity = scrollProgress > 0.88 ? (scrollProgress - 0.88) * 8.33 : 0;
-        contactRef.current.style.opacity = String(Math.min(1, opacity));
-        contactRef.current.style.visibility = scrollProgress > 0.85 ? 'visible' : 'hidden';
+    const ctx = gsap.context(() => {
+      // Heading reveal
+      if (headingRef.current) {
+        const words = headingRef.current.querySelectorAll('.contact-word');
+        gsap.fromTo(words,
+          { y: 100, opacity: 0, rotateX: -30 },
+          {
+            y: 0, opacity: 1, rotateX: 0,
+            duration: 1.2, stagger: 0.1, ease: 'expo.out',
+            scrollTrigger: { trigger: headingRef.current, start: 'top 80%' }
+          }
+        );
       }
 
-      // Update particles
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-
-        if (chaos > 0.1) {
-          const angle = time * (0.5 + chaos * 2) + i * 0.01;
-          const radius = 2 + (i / particleCount) * 10 * chaos;
-          const turb = (Math.random() - 0.5) * chaos * 0.1;
-
-          posArray[i3] += (Math.cos(angle) * radius - posArray[i3]) * 0.02 + turb;
-          posArray[i3 + 1] += (Math.sin(time + i * 0.1) * 2 * chaos - posArray[i3 + 1]) * 0.02 + turb;
-          posArray[i3 + 2] += (Math.sin(angle) * radius - posArray[i3 + 2]) * 0.02 + turb;
-        } else {
-          const t = i / particleCount;
-          const spiralAngle = t * Math.PI * 8;
-          const spiralRadius = 3 + t * 8;
-          posArray[i3] += (Math.cos(spiralAngle) * spiralRadius - posArray[i3]) * 0.03;
-          posArray[i3 + 1] += ((t - 0.5) * 6 - posArray[i3 + 1]) * 0.03;
-          posArray[i3 + 2] += (Math.sin(spiralAngle) * spiralRadius - posArray[i3 + 2]) * 0.03;
-        }
+      // Form fields entrance
+      if (formRef.current) {
+        const fields = formRef.current.querySelectorAll('.form-field');
+        gsap.fromTo(fields,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.8, stagger: 0.1, ease: 'power3.out',
+            scrollTrigger: { trigger: formRef.current, start: 'top 75%' }
+          }
+        );
       }
 
-      geometry.attributes.position.needsUpdate = true;
-      points.rotation.y = time * 0.05;
+      // Info panel
+      if (infoRef.current) {
+        gsap.fromTo(infoRef.current,
+          { opacity: 0, x: 40 },
+          {
+            opacity: 1, x: 0,
+            duration: 1, ease: 'expo.out',
+            scrollTrigger: { trigger: infoRef.current, start: 'top 80%' }
+          }
+        );
+      }
+    }, section);
 
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-    const onResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-    
-    let resizeTimer: number;
-    const debouncedResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(onResize, 200);
-    };
-
-    window.addEventListener('resize', debouncedResize);
-
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('resize', debouncedResize);
-      st.kill();
-      renderer.dispose();
-      geometry.dispose();
-      material.dispose();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       id="contact"
       ref={sectionRef}
-      className="relative"
-      style={{ height: '350vh', zIndex: 2 }}
+      className="relative bg-obsidian py-32 lg:py-48 overflow-hidden"
+      style={{ zIndex: 2 }}
     >
-      {/* Sticky container */}
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full z-0"
-        />
+      {/* Background accents */}
+      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-saffron/3 rounded-full blur-[150px] pointer-events-none" />
 
-        {/* Vignette overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none z-[1]"
-          style={{
-            background: 'radial-gradient(circle, transparent 20%, rgba(10,10,10,0.7) 100%)',
-          }}
-        />
+      <div className="px-6 md:px-20 max-w-7xl mx-auto relative z-10">
+        {/* Section label */}
+        <span className="font-mono text-[10px] tracking-[0.5em] text-saffron uppercase mb-6 block">
+          04 // Get in Touch
+        </span>
+        <div className="h-px w-16 bg-saffron/30 mb-16" />
 
-        {/* Text overlay */}
-        <div className="absolute inset-0 flex items-center justify-center z-[2]">
-          <div className="relative text-center w-full px-6">
-            <div
-              ref={text1Ref}
-              className="font-display text-parchment transition-opacity duration-300"
-              style={{
-                fontSize: 'clamp(40px, 12vw, 120px)',
-                lineHeight: 0.9,
-              }}
-            >
-              Got a vision?
-            </div>
-
-            <div
-              ref={text2Ref}
-              className="font-display text-parchment absolute inset-0 flex items-center justify-center pointer-events-none"
-              style={{
-                fontSize: 'clamp(40px, 12vw, 120px)',
-                lineHeight: 0.9,
-                opacity: 0,
-              }}
-            >
-              <span>Let's make it</span>
-            </div>
-
-            <div
-              ref={text3Ref}
-              className="font-display text-parchment absolute inset-0 flex items-center justify-center pointer-events-none"
-              style={{
-                fontSize: 'clamp(40px, 12vw, 120px)',
-                lineHeight: 0.9,
-                opacity: 0,
-              }}
-            >
-              <span>happen.</span>
-            </div>
-          </div>
+        {/* Heading */}
+        <div ref={headingRef} className="mb-20 perspective-1000 overflow-hidden">
+          <h2 className="font-display text-[clamp(40px,8vw,100px)] leading-[0.95] tracking-tight">
+            <span className="contact-word inline-block">Got</span>{' '}
+            <span className="contact-word inline-block">a</span>{' '}
+            <span className="contact-word inline-block text-saffron italic">vision</span>
+            <span className="contact-word inline-block">?</span>
+            <br />
+            <span className="contact-word inline-block">Let's</span>{' '}
+            <span className="contact-word inline-block">make</span>{' '}
+            <span className="contact-word inline-block">it</span>{' '}
+            <span className="contact-word inline-block text-saffron italic">real</span>
+            <span className="contact-word inline-block">.</span>
+          </h2>
         </div>
 
-        {/* Contact info */}
-        <div
-          ref={contactRef}
-          className="absolute bottom-0 left-0 right-0 opacity-0 invisible"
-          style={{ zIndex: 10, padding: '0 8vw 10vh' }}
-        >
-          <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-8">
-            <div className="flex flex-col items-center md:items-start gap-4 md:gap-8">
-              <a
-                href="mailto:hello@indraam.com"
-                className="font-mono text-lg md:text-base text-parchment hover:text-saffron transition-colors duration-300"
-              >
-                hello@indraam.com
-              </a>
-              <a
-                href="tel:+12036402437"
-                className="font-mono text-sm text-fog hover:text-parchment transition-colors duration-300"
-              >
-                +1 (203) 640-2437
-              </a>
-            </div>
-            
-            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
-              <button
-                className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-fog border border-fog/20 px-8 py-4 md:px-6 md:py-3 hover:border-saffron hover:text-saffron transition-all duration-300"
-              >
-                Call Us
-              </button>
-              <button
-                className="font-mono text-[10px] md:text-xs uppercase tracking-[0.12em] text-obsidian bg-parchment px-8 py-4 md:px-6 md:py-3 hover:bg-saffron transition-colors duration-300"
-              >
-                Meet Us
-              </button>
-            </div>
+        {/* Form + Info Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+          {/* Left: Contact Form */}
+          <div className="lg:col-span-7">
+            <form
+              ref={formRef}
+              className="space-y-10"
+              onSubmit={(e) => { e.preventDefault(); alert('Message sent! We\'ll be in touch.'); }}
+            >
+              <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                    Your Name
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="John Doe"
+                    className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                    Email
+                  </label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="john@company.com"
+                    className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500"
+                  />
+                </div>
+              </div>
+
+              <div className="form-field">
+                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your company name"
+                  className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500"
+                />
+              </div>
+
+              <div className="form-field">
+                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                  What can we help with?
+                </label>
+                <div className="flex flex-wrap gap-3 mb-8">
+                  {['Agentic AI', 'Web App', 'Mobile App', 'Computer Vision', 'Data Pipeline', 'Other'].map((tag) => (
+                    <label key={tag} className="group cursor-pointer">
+                      <input type="checkbox" className="sr-only peer" />
+                      <span className="inline-block px-4 py-2 border border-white/10 font-mono text-[10px] uppercase tracking-widest text-fog/40 peer-checked:border-saffron/50 peer-checked:text-saffron peer-checked:bg-saffron/5 hover:border-white/20 hover:text-fog/60 transition-all duration-300">
+                        {tag}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-field">
+                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                  Tell us about your project
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Describe your vision..."
+                  className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500 resize-none"
+                />
+              </div>
+
+              <div className="form-field pt-4">
+                <button
+                  type="submit"
+                  className="group relative inline-flex items-center gap-4 px-10 py-5 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_60px_rgba(242,204,143,0.2)]"
+                >
+                  <div className="absolute inset-0 bg-parchment translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-600 ease-out" />
+                  <span className="relative z-10 font-bold">Send Message</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transform group-hover:translate-x-1.5 group-hover:-translate-y-1 transition-transform duration-300">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </button>
+              </div>
+            </form>
           </div>
 
-          <div className="mt-12 md:mt-8 text-center md:text-left">
-            <span className="font-mono text-[9px] md:text-xs uppercase tracking-[0.12em] text-fog/40">
-              EST. 2026 // US Based Studio
-            </span>
+          {/* Right: Contact Info */}
+          <div ref={infoRef} className="lg:col-span-5">
+            <div className="lg:sticky lg:top-32 space-y-10">
+              {/* Email */}
+              <div className="group">
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron/50 mb-3">Email</span>
+                <a href="mailto:hello@indraam.com" className="font-display text-2xl lg:text-3xl text-parchment hover:text-saffron transition-colors duration-500">
+                  hello@indraam.com
+                </a>
+                <div className="h-[1px] w-0 bg-saffron group-hover:w-full transition-all duration-700 mt-2" />
+              </div>
+
+              {/* Phone */}
+              <div className="group">
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron/50 mb-3">Phone</span>
+                <a href="tel:+12036402437" className="font-display text-xl text-parchment/80 hover:text-saffron transition-colors duration-500">
+                  +1 (203) 640-2437
+                </a>
+              </div>
+
+              {/* Location */}
+              <div>
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron/50 mb-3">Location</span>
+                <p className="font-body text-fog/60 text-sm leading-relaxed">
+                  United States<br />
+                  Available worldwide
+                </p>
+              </div>
+
+              {/* Quick CTA buttons */}
+              <div className="flex flex-col gap-3 pt-4">
+                <a href="tel:+12036402437" className="group flex items-center justify-between px-6 py-4 border border-white/10 hover:border-saffron/30 transition-all duration-500">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-fog/60 group-hover:text-parchment transition-colors">
+                    Schedule a Call
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-fog/30 group-hover:text-saffron transition-colors">
+                    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </a>
+                <a href="mailto:hello@indraam.com" className="group flex items-center justify-between px-6 py-4 border border-white/10 hover:border-saffron/30 transition-all duration-500">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-fog/60 group-hover:text-parchment transition-colors">
+                    Email Us
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-fog/30 group-hover:text-saffron transition-colors">
+                    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </a>
+              </div>
+
+              {/* Social */}
+              <div className="pt-4">
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/20 mb-4">Follow</span>
+                <div className="flex gap-3">
+                  {['IG', 'TW', 'LI', 'GH'].map((social) => (
+                    <div
+                      key={social}
+                      className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-saffron hover:text-obsidian hover:border-saffron hover:scale-110 transition-all duration-500 cursor-pointer"
+                    >
+                      <span className="font-mono text-[9px]">{social}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

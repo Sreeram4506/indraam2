@@ -7,48 +7,31 @@ interface PreloaderProps {
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const textRef = useRef<SVGTextElement>(null);
-  const turbRef = useRef<SVGFETurbulenceElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const overlayTopRef = useRef<HTMLDivElement>(null);
+  const overlayBottomRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
-  const rafRef = useRef<number>(0);
+  const wordsRef = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
-    // Simulate progress
+    // Simulate loading progress
     const progressInterval = setInterval(() => {
       setProgress((p) => {
         if (p >= 100) {
           clearInterval(progressInterval);
           return 100;
         }
-        return p + Math.random() * 15 + 5;
+        return Math.min(p + Math.random() * 8 + 2, 100);
       });
-    }, 100);
+    }, 80);
 
-    // Breathing animation
-    let startTime = Date.now();
-    const animateBreath = () => {
-      if (!turbRef.current) return;
-      const now = Date.now();
-      const elapsed = (now - startTime) * 0.001;
-      const baseFreq = 0.015 + Math.sin(elapsed) * 0.005;
-      turbRef.current.setAttribute(
-        'baseFrequency',
-        `${baseFreq} ${baseFreq}`
-      );
-      rafRef.current = requestAnimationFrame(animateBreath);
-    };
-    rafRef.current = requestAnimationFrame(animateBreath);
-
-    // Entrance timeline
+    // Master timeline
     const tl = gsap.timeline({
       onComplete: () => {
-        cancelAnimationFrame(rafRef.current);
-        gsap.to(containerRef.current, {
-          opacity: 0,
-          duration: 0.6,
-          delay: 0.3,
-          ease: 'power2.inOut',
+        // Curtain reveal - split screen wipe
+        const exitTl = gsap.timeline({
           onComplete: () => {
             if (containerRef.current) {
               containerRef.current.style.display = 'none';
@@ -56,90 +39,132 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             onComplete();
           },
         });
+
+        exitTl
+          .to(textRef.current, {
+            scale: 1.5,
+            opacity: 0,
+            filter: 'blur(20px)',
+            duration: 0.6,
+            ease: 'power3.in',
+          })
+          .to(lineRef.current, {
+            scaleX: 0,
+            duration: 0.3,
+            ease: 'power3.in',
+          }, '<')
+          .to(counterRef.current, {
+            opacity: 0,
+            y: -20,
+            duration: 0.3,
+          }, '<')
+          .to(overlayTopRef.current, {
+            yPercent: -100,
+            duration: 0.8,
+            ease: 'power4.inOut',
+          }, '-=0.1')
+          .to(overlayBottomRef.current, {
+            yPercent: 100,
+            duration: 0.8,
+            ease: 'power4.inOut',
+          }, '<');
       },
     });
 
-    // Stroke draw-in
-    if (textRef.current) {
-      const length = textRef.current.getComputedTextLength?.() || 600;
-      gsap.set(textRef.current, {
-        strokeDasharray: length,
-        strokeDashoffset: length,
-      });
-      tl.to(
-        textRef.current,
-        {
-          strokeDashoffset: 0,
-          duration: 2,
-          ease: 'power2.inOut',
-        },
-        0.5
-      );
-    }
+    // Staggered letter entrance
+    tl.fromTo(
+      wordsRef.current.filter(Boolean),
+      {
+        y: 120,
+        rotateX: -90,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        rotateX: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.08,
+        ease: 'expo.out',
+      },
+      0.3
+    );
 
-    // Hold for a moment then fade
-    tl.to({}, { duration: 0.8 });
+    // Progress line animation
+    tl.fromTo(lineRef.current,
+      { scaleX: 0 },
+      { scaleX: 1, duration: 2.5, ease: 'power1.inOut' },
+      0.5
+    );
+
+    // Hold
+    tl.to({}, { duration: 0.5 });
 
     return () => {
       clearInterval(progressInterval);
-      cancelAnimationFrame(rafRef.current);
       tl.kill();
     };
   }, [onComplete]);
 
+  const letters = 'INDRAAM'.split('');
+
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] bg-obsidian flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden"
     >
-      <svg
-        ref={svgRef}
-        viewBox="0 0 300 100"
-        className="w-64 md:w-80"
-        style={{ overflow: 'visible' }}
-      >
-        <defs>
-          <filter id="breathe-filter">
-            <feTurbulence
-              ref={turbRef}
-              type="fractalNoise"
-              baseFrequency="0.015"
-              numOctaves="3"
-              result="warp"
-            />
-            <feDisplacementMap
-              xChannelSelector="R"
-              yChannelSelector="G"
-              scale="25"
-              in="SourceGraphic"
-              in2="warp"
-            />
-          </filter>
-        </defs>
-        <text
-          ref={textRef}
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          filter="url(#breathe-filter)"
-          style={{
-            fontFamily: '"Outfit", sans-serif',
-            fontSize: '32px',
-            fontWeight: 400,
-            fill: 'none',
-            stroke: '#F4F1DE',
-            strokeWidth: '0.5px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.4em',
-          }}
-        >
-          Indraam Studio
-        </text>
-      </svg>
+      {/* Split curtain overlays */}
+      <div
+        ref={overlayTopRef}
+        className="absolute top-0 left-0 right-0 h-1/2 bg-obsidian z-10"
+      />
+      <div
+        ref={overlayBottomRef}
+        className="absolute bottom-0 left-0 right-0 h-1/2 bg-obsidian z-10"
+      />
 
-      <div className="mt-12 font-mono text-xs tracking-[0.12em] text-fog uppercase">
-        {Math.min(Math.round(progress), 100)}%
+      {/* Content layer */}
+      <div className="relative z-20 flex flex-col items-center">
+        {/* Main text */}
+        <div
+          ref={textRef}
+          className="flex items-center overflow-hidden perspective-1000"
+        >
+          {letters.map((letter, i) => (
+            <span
+              key={i}
+              ref={(el) => { wordsRef.current[i] = el; }}
+              className="font-display text-[clamp(48px,12vw,140px)] text-parchment inline-block"
+              style={{
+                transformOrigin: 'bottom center',
+                letterSpacing: '0.08em',
+              }}
+            >
+              {letter}
+            </span>
+          ))}
+        </div>
+
+        {/* Subtitle */}
+        <div className="mt-4 font-mono text-[10px] tracking-[0.6em] uppercase text-saffron/60">
+          Creative Studio
+        </div>
+
+        {/* Progress line */}
+        <div className="mt-12 w-48 h-[1px] bg-white/10 relative overflow-hidden">
+          <div
+            ref={lineRef}
+            className="absolute inset-0 bg-saffron origin-left"
+          />
+        </div>
+
+        {/* Counter */}
+        <span
+          ref={counterRef}
+          className="mt-4 font-mono text-xs tracking-[0.2em] text-fog/40 tabular-nums"
+        >
+          {Math.min(Math.round(progress), 100)}
+        </span>
       </div>
     </div>
   );

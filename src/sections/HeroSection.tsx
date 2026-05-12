@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
 import ParticleText from '../components/ParticleText';
-import InteractiveGraph from '../components/InteractiveGraph';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -12,95 +11,115 @@ interface HeroSectionProps {
 
 export default function HeroSection({ entranceComplete }: HeroSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const mobileTextRef = useRef<HTMLDivElement>(null);
   const scrollHintRef = useRef<HTMLDivElement>(null);
-  const graphContainerRef = useRef<HTMLDivElement>(null);
+  const taglineRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const badgesRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Entrance animation timeline
   useEffect(() => {
-    if (entranceComplete && isMobile && mobileTextRef.current) {
-      const children = mobileTextRef.current.children;
-      
-      // Est. 2026 - Fade in
-      gsap.fromTo(children[0], 
-        { opacity: 0, y: 20 }, 
-        { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
-      );
+    if (!entranceComplete || !sectionRef.current) return;
 
-      // INDRAAM - Diverge left
-      gsap.fromTo(children[1],
-        { opacity: 0, x: 100, skewX: -10 },
-        { opacity: 1, x: 0, skewX: 0, duration: 1.5, ease: 'expo.out', delay: 0.2 }
-      );
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-      // STUDIO - Diverge right
-      gsap.fromTo(children[2],
-        { opacity: 0, x: -100, skewX: 10 },
-        { opacity: 1, x: 0, skewX: 0, duration: 1.5, ease: 'expo.out', delay: 0.3 }
+    // Tagline words reveal with stagger
+    if (taglineRef.current) {
+      const words = taglineRef.current.querySelectorAll('.word');
+      tl.fromTo(words,
+        { y: 120, opacity: 0, rotateX: -45, skewY: 3 },
+        { y: 0, opacity: 1, rotateX: 0, skewY: 0, duration: 1.4, stagger: 0.1 },
+        0.2
       );
-
-      // Paragraph - Fade in
-      gsap.fromTo(children[3],
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.6 }
-      );
-
-      // Button - Fade in
-      if (children[4]) {
-        gsap.fromTo(children[4],
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.8 }
-        );
-      }
     }
-  }, [entranceComplete, isMobile]);
 
-  // Scroll hint fades out as you scroll
-  useEffect(() => {
-    if (!scrollHintRef.current || !entranceComplete) return;
-
-    // Entrance animation for scroll hint
-    gsap.fromTo(scrollHintRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1, delay: 2, ease: 'power3.out' }
+    // Subtitle slide up
+    tl.fromTo(subtitleRef.current,
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1 },
+      0.8
     );
 
-    // Graph container animation
-    if (graphContainerRef.current) {
-      gsap.fromTo(graphContainerRef.current,
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 1.5, delay: 1, ease: 'power4.out' }
+    // CTA buttons
+    tl.fromTo(ctaRef.current,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8 },
+      1.0
+    );
+
+    // Badges
+    if (badgesRef.current) {
+      tl.fromTo(badgesRef.current.children,
+        { y: 20, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.1 },
+        1.2
       );
     }
+
+    // Video container
+    tl.fromTo(videoContainerRef.current,
+      { clipPath: 'inset(100% 0 0 0)', opacity: 0 },
+      { clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 1.5, ease: 'power4.inOut' },
+      0.6
+    );
+
+    // Counter numbers
+    if (counterRef.current) {
+      tl.fromTo(counterRef.current.children,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15 },
+        1.4
+      );
+    }
+
+    // Scroll hint
+    tl.fromTo(scrollHintRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      2
+    );
+
+    return () => { tl.kill(); };
+  }, [entranceComplete]);
+
+  // Parallax scroll effect
+  useEffect(() => {
+    if (!entranceComplete || !sectionRef.current) return;
 
     const st = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top top',
       end: 'bottom top',
       onUpdate: (self) => {
+        const p = self.progress;
+
         if (scrollHintRef.current) {
-          scrollHintRef.current.style.opacity = String(1 - self.progress * 3);
-        }
-        // Fade out particle canvas container
-        const canvas = sectionRef.current?.querySelector('canvas');
-        if (canvas) {
-          canvas.style.opacity = String(1 - self.progress * 2);
-          canvas.style.visibility = self.progress > 0.9 ? 'hidden' : 'visible';
+          scrollHintRef.current.style.opacity = String(1 - p * 4);
         }
 
-        // Fade out graph
-        if (graphContainerRef.current) {
-          graphContainerRef.current.style.opacity = String(1 - self.progress * 1.5);
-          graphContainerRef.current.style.transform = `scale(${1 - self.progress * 0.2})`;
+        if (taglineRef.current) {
+          taglineRef.current.style.transform = `translateY(${p * -80}px)`;
+          taglineRef.current.style.opacity = String(1 - p * 1.5);
+        }
+
+        if (subtitleRef.current) {
+          subtitleRef.current.style.transform = `translateY(${p * -60}px)`;
+          subtitleRef.current.style.opacity = String(1 - p * 2);
+        }
+
+        if (videoContainerRef.current) {
+          videoContainerRef.current.style.transform = `translateY(${p * 60}px) scale(${1 + p * 0.1})`;
         }
       },
     });
@@ -108,145 +127,181 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
     return () => st.kill();
   }, [entranceComplete]);
 
-  if (!entranceComplete) return null;
+  if (!entranceComplete) return (
+    <section id="hero" className="relative min-h-screen bg-obsidian" style={{ zIndex: 1 }} />
+  );
 
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden select-none bg-obsidian text-parchment bg-grid"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden select-none bg-obsidian text-parchment"
       style={{ zIndex: 1 }}
     >
-      {/* DESKTOP UI */}
-      {!isMobile && (
-        <div className="relative w-full h-full flex items-center justify-center">
-          {/* Main Content Layout */}
-          <div className="container mx-auto px-12 flex items-center justify-between z-10">
-            {/* Left side: Text content */}
-            <div className="flex-1 max-w-xl flex flex-col justify-center">
-              <div className="w-full h-[120px] mb-6">
+      {/* Ambient background grid */}
+      <div className="absolute inset-0 bg-grid opacity-40" />
+
+      {/* Gradient orbs */}
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-saffron/8 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-terracotta/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-screen py-32">
+          {/* Left: Text Content */}
+          <div className="lg:col-span-7 flex flex-col justify-center">
+            {/* Badge row */}
+            <div ref={badgesRef} className="flex flex-wrap items-center gap-3 mb-8">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 border border-saffron/20 font-mono text-[9px] uppercase tracking-[0.2em] text-saffron">
+                <span className="w-1.5 h-1.5 bg-saffron rounded-full animate-pulse" />
+                Available for Q3 2026
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 border border-white/10 font-mono text-[9px] uppercase tracking-[0.2em] text-fog/60">
+                US Based Studio
+              </span>
+            </div>
+
+            {/* Main headline - Particle text on desktop, styled text on mobile */}
+            {!isMobile ? (
+              <div className="w-full h-[120px] mb-4">
                 <ParticleText text="INDRAAM STUDIO" fontSize={80} align="left" />
               </div>
-              <p className="font-body text-fog/60 text-xl leading-relaxed animate-in fade-in slide-in-from-left-8 duration-1000 delay-500 fill-mode-both relative z-10 mb-10">
-                We transform your business through <span className="text-saffron italic underline underline-offset-8 decoration-saffron/20">Agentic AI</span> and <span className="text-saffron italic underline underline-offset-8 decoration-saffron/20">robust software engineering</span>, building autonomous ecosystems that reason, scale, and deliver real-time intelligence.
-              </p>
-              <div className="flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-left-8 duration-1000 delay-700 fill-mode-both">
-                <button 
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="w-fit group relative px-8 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:bg-parchment"
-                >
-                  <span className="relative z-10 flex items-center gap-3 font-bold">
-                    Book Free Audit
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 transition-transform">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </span>
-                </button>
+            ) : null}
 
-                <button 
-                  onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="w-fit group relative px-8 py-4 bg-transparent border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:text-obsidian hover:border-saffron"
-                >
-                  <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
-                  <span className="relative z-10 flex items-center gap-3">
-                    Portfolio
-                  </span>
-                </button>
-              </div>
+            {/* Tagline */}
+            <div ref={taglineRef} className="mb-8 perspective-1000 overflow-hidden">
+              {isMobile && (
+                <h1 className="font-display text-[clamp(36px,10vw,48px)] leading-[0.9] tracking-tight mb-4">
+                  <span className="word inline-block">INDRAAM</span>{' '}
+                  <span className="word inline-block text-transparent" style={{ WebkitTextStroke: '1px rgba(244, 241, 222, 0.5)' }}>STUDIO</span>
+                </h1>
+              )}
+              <h2 className="font-display text-[clamp(28px,4vw,52px)] leading-[1.05] tracking-tight">
+                <span className="word inline-block">We</span>{' '}
+                <span className="word inline-block">engineer</span>{' '}
+                <span className="word inline-block text-saffron italic">autonomous</span>{' '}
+                <span className="word inline-block">systems</span>{' '}
+                <br className="hidden lg:block" />
+                <span className="word inline-block">that</span>{' '}
+                <span className="word inline-block text-saffron italic">think,</span>{' '}
+                <span className="word inline-block text-saffron italic">adapt,</span>{' '}
+                <span className="word inline-block">&</span>{' '}
+                <span className="word inline-block">deliver.</span>
+              </h2>
             </div>
 
-            {/* Right side: Interactive Graph */}
-            <div ref={graphContainerRef} className="flex-1 h-full flex items-center justify-center">
-              <InteractiveGraph />
-            </div>
-          </div>
-
-          {/* Scroll Hint */}
-          <div 
-            ref={scrollHintRef}
-            className="absolute bottom-12 w-full flex flex-col items-center gap-4 opacity-0 hidden lg:flex"
-          >
-            <span className="font-mono text-[10px] tracking-[0.5em] uppercase text-fog/40 pointer-events-none">
-              Explore our connected intelligence
-            </span>
-            <div className="flex flex-col items-center gap-1 animate-bounce-slow">
-              <div className="w-px h-6 bg-gradient-to-b from-saffron/60 to-transparent" />
-              <svg width="12" height="8" viewBox="0 0 12 8" fill="none" className="text-saffron/40">
-                <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MOBILE UI */}
-      {isMobile && (
-        <div className="relative w-full h-full flex flex-col items-start justify-center px-8 z-10 pt-20">
-          {/* Background Cinematic Texture */}
-          <div className="absolute inset-0 z-0">
-             <video 
-               autoPlay muted loop playsInline
-               className="w-full h-full object-cover opacity-20 grayscale"
-               src="https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-building-exterior-4455-large.mp4"
-             />
-             <div className="absolute inset-0 bg-gradient-to-b from-obsidian via-transparent to-obsidian" />
-          </div>
-
-          {/* Graph on Mobile (Smaller and above/below text) */}
-          <div ref={graphContainerRef} className="w-full h-[300px] mb-8 relative z-10">
-            <InteractiveGraph />
-          </div>
-
-          {/* Typography Grid */}
-          <div ref={mobileTextRef} className="relative z-10 flex flex-col">
-            <span className="font-mono text-[10px] tracking-[0.6em] text-saffron uppercase mb-4 opacity-0">
-              Est. 2026 // STUDIO
-            </span>
-            <h1 className="font-display text-[clamp(40px,12vw,60px)] leading-[0.85] tracking-tighter text-white opacity-0">
-              INDRAAM
-            </h1>
-            <h1 className="font-display text-[clamp(40px,12vw,60px)] leading-[0.85] tracking-tighter text-transparent opacity-0" style={{ WebkitTextStroke: '1px rgba(244, 241, 222, 0.4)' }}>
-              STUDIO
-            </h1>
-            
-            <p className="mt-8 font-body text-fog/60 text-base max-w-[280px] leading-relaxed opacity-0 mb-8">
-              Empowering businesses through <span className="text-saffron italic">Agentic AI</span> and robust software engineering.
+            {/* Subtitle */}
+            <p
+              ref={subtitleRef}
+              className="font-body text-fog/50 text-base lg:text-lg leading-relaxed max-w-lg mb-10 border-l-2 border-saffron/20 pl-6"
+            >
+              From <span className="text-parchment/80">Agentic AI</span> to full-stack applications —
+              we architect digital ecosystems that don't just run, they <span className="text-saffron/80 italic">reason</span>.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 opacity-0">
-              <button 
+            {/* CTA */}
+            <div ref={ctaRef} className="flex flex-wrap items-center gap-4">
+              <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-fit group relative px-6 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:bg-parchment"
+                className="group relative px-8 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(242,204,143,0.3)]"
               >
+                <div className="absolute inset-0 bg-parchment translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10 flex items-center gap-3 font-bold">
                   Book Free Audit
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 transition-transform">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1.5 transition-transform duration-300">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>
                 </span>
               </button>
 
-              <button 
+              <button
                 onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-fit group relative px-6 py-4 bg-transparent border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:text-obsidian hover:border-saffron"
+                className="group relative px-8 py-4 border border-white/15 text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:border-saffron/50"
               >
-                <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
+                <div className="absolute inset-0 bg-saffron/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10 flex items-center gap-3">
-                  Portfolio
+                  View Work
+                  <span className="inline-block w-1.5 h-1.5 bg-saffron rounded-full group-hover:scale-150 transition-transform" />
                 </span>
               </button>
             </div>
           </div>
 
-          {/* Mobile Scroll Hint */}
-          <div className="absolute bottom-12 left-8 flex items-center space-x-4">
-             <div className="w-[1px] h-12 bg-gradient-to-b from-saffron to-transparent" />
-             <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/60">Scroll</span>
+          {/* Right: Visual showcase */}
+          <div className="lg:col-span-5 relative">
+            <div
+              ref={videoContainerRef}
+              className="relative aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden group"
+            >
+              {/* Video */}
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover grayscale brightness-[0.4] group-hover:grayscale-0 group-hover:brightness-75 transition-all duration-1000"
+              >
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-futuristic-devices-99786-large.mp4" type="video/mp4" />
+              </video>
+
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/50" />
+
+              {/* Corner accent */}
+              <div className="absolute top-0 right-0 w-24 h-24">
+                <div className="absolute top-0 right-0 w-full h-[1px] bg-saffron/40" />
+                <div className="absolute top-0 right-0 h-full w-[1px] bg-saffron/40" />
+              </div>
+              <div className="absolute bottom-0 left-0 w-24 h-24">
+                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-saffron/40" />
+                <div className="absolute bottom-0 left-0 h-full w-[1px] bg-saffron/40" />
+              </div>
+
+              {/* Floating overlay label */}
+              <div className="absolute top-6 left-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div className="w-2 h-2 bg-saffron rounded-full animate-pulse" />
+                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron">Live</span>
+              </div>
+
+              {/* Bottom overlay info */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/60 mb-1">Featured</div>
+                <div className="font-display text-xl text-parchment">Autonomous Intelligence</div>
+              </div>
+            </div>
+
+            {/* Stats counters */}
+            <div ref={counterRef} className="grid grid-cols-3 mt-6 gap-4">
+              <div className="text-center border border-white/5 py-4 hover:border-saffron/20 transition-colors duration-500">
+                <div className="font-display text-2xl lg:text-3xl text-parchment">50+</div>
+                <div className="font-mono text-[8px] tracking-[0.2em] uppercase text-fog/40 mt-1">Projects</div>
+              </div>
+              <div className="text-center border border-white/5 py-4 hover:border-saffron/20 transition-colors duration-500">
+                <div className="font-display text-2xl lg:text-3xl text-saffron">98%</div>
+                <div className="font-mono text-[8px] tracking-[0.2em] uppercase text-fog/40 mt-1">Retention</div>
+              </div>
+              <div className="text-center border border-white/5 py-4 hover:border-saffron/20 transition-colors duration-500">
+                <div className="font-display text-2xl lg:text-3xl text-parchment">24/7</div>
+                <div className="font-mono text-[8px] tracking-[0.2em] uppercase text-fog/40 mt-1">AI Uptime</div>
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Scroll Hint */}
+      <div
+        ref={scrollHintRef}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0"
+      >
+        <span className="font-mono text-[9px] tracking-[0.4em] uppercase text-fog/30">
+          Scroll to explore
+        </span>
+        <div className="relative w-[1px] h-12 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-saffron/60 to-transparent animate-scroll-line" />
+        </div>
+      </div>
     </section>
   );
 }
