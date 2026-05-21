@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import ParticleText from '../components/ParticleText';
+import FlowingNodeGraph from '../components/FlowingNodeGraph';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -15,10 +16,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
   const taglineRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const badgesRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLDivElement>(null);
+  const visualRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -58,30 +56,12 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
       1.0
     );
 
-    // Badges
-    if (badgesRef.current) {
-      tl.fromTo(badgesRef.current.children,
-        { y: 20, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.1 },
-        1.2
-      );
-    }
-
-    // Video container
-    tl.fromTo(videoContainerRef.current,
-      { clipPath: 'inset(100% 0 0 0)', opacity: 0 },
-      { clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 1.5, ease: 'power4.inOut' },
+    // Visual showcase entrance
+    tl.fromTo(visualRef.current,
+      { opacity: 0, scale: 0.8, rotate: -5 },
+      { opacity: 1, scale: 1, rotate: 0, duration: 1.5, ease: 'power4.out' },
       0.6
     );
-
-    // Counter numbers
-    if (counterRef.current) {
-      tl.fromTo(counterRef.current.children,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15 },
-        1.4
-      );
-    }
 
     // Scroll hint
     tl.fromTo(scrollHintRef.current,
@@ -118,8 +98,8 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
           subtitleRef.current.style.opacity = String(1 - p * 2);
         }
 
-        if (videoContainerRef.current) {
-          videoContainerRef.current.style.transform = `translateY(${p * 60}px) scale(${1 + p * 0.1})`;
+        if (visualRef.current) {
+          visualRef.current.style.transform = `translateY(${p * 60}px) scale(${1 + p * 0.05})`;
         }
       },
     });
@@ -149,17 +129,6 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-screen py-32">
           {/* Left: Text Content */}
           <div className="lg:col-span-7 flex flex-col justify-center">
-            {/* Badge row */}
-            <div ref={badgesRef} className="flex flex-wrap items-center gap-3 mb-8">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 border border-saffron/20 font-mono text-[9px] uppercase tracking-[0.2em] text-saffron">
-                <span className="w-1.5 h-1.5 bg-saffron rounded-full animate-pulse" />
-                Available for Q3 2026
-              </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 border border-white/10 font-mono text-[9px] uppercase tracking-[0.2em] text-fog/60">
-                US Based Studio
-              </span>
-            </div>
-
             {/* Main headline - Particle text on desktop, styled text on mobile */}
             {!isMobile ? (
               <div className="w-full h-[120px] mb-4">
@@ -199,10 +168,10 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             </p>
 
             {/* CTA */}
-            <div ref={ctaRef} className="flex flex-wrap items-center gap-4">
+            <div ref={ctaRef} className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group relative px-8 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(242,204,143,0.3)]"
+                className="w-full md:w-auto flex justify-center group relative px-8 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(242,204,143,0.3)]"
               >
                 <div className="absolute inset-0 bg-parchment translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10 flex items-center gap-3 font-bold">
@@ -216,7 +185,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
 
               <button
                 onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
-                className="group relative px-8 py-4 border border-white/15 text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:border-saffron/50"
+                className="w-full md:w-auto flex justify-center group relative px-8 py-4 border border-white/15 text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:border-saffron/50"
               >
                 <div className="absolute inset-0 bg-saffron/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10 flex items-center gap-3">
@@ -227,64 +196,10 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* Right: Visual showcase */}
-          <div className="lg:col-span-5 relative">
-            <div
-              ref={videoContainerRef}
-              className="relative aspect-[3/4] lg:aspect-[4/5] w-full overflow-hidden group"
-            >
-              {/* Video */}
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover grayscale brightness-[0.4] group-hover:grayscale-0 group-hover:brightness-75 transition-all duration-1000"
-              >
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-futuristic-devices-99786-large.mp4" type="video/mp4" />
-              </video>
-
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/50" />
-
-              {/* Corner accent */}
-              <div className="absolute top-0 right-0 w-24 h-24">
-                <div className="absolute top-0 right-0 w-full h-[1px] bg-saffron/40" />
-                <div className="absolute top-0 right-0 h-full w-[1px] bg-saffron/40" />
-              </div>
-              <div className="absolute bottom-0 left-0 w-24 h-24">
-                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-saffron/40" />
-                <div className="absolute bottom-0 left-0 h-full w-[1px] bg-saffron/40" />
-              </div>
-
-              {/* Floating overlay label */}
-              <div className="absolute top-6 left-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                <div className="w-2 h-2 bg-saffron rounded-full animate-pulse" />
-                <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron">Live</span>
-              </div>
-
-              {/* Bottom overlay info */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/60 mb-1">Featured</div>
-                <div className="font-display text-xl text-parchment">Autonomous Intelligence</div>
-              </div>
-            </div>
-
-            {/* Stats counters */}
-            <div ref={counterRef} className="grid grid-cols-3 mt-6 gap-4">
-              <div className="text-center border border-white/5 py-4 hover:border-saffron/20 transition-colors duration-500">
-                <div className="font-display text-2xl lg:text-3xl text-parchment">50+</div>
-                <div className="font-mono text-[8px] tracking-[0.2em] uppercase text-fog/40 mt-1">Projects</div>
-              </div>
-              <div className="text-center border border-white/5 py-4 hover:border-saffron/20 transition-colors duration-500">
-                <div className="font-display text-2xl lg:text-3xl text-saffron">98%</div>
-                <div className="font-mono text-[8px] tracking-[0.2em] uppercase text-fog/40 mt-1">Retention</div>
-              </div>
-              <div className="text-center border border-white/5 py-4 hover:border-saffron/20 transition-colors duration-500">
-                <div className="font-display text-2xl lg:text-3xl text-parchment">24/7</div>
-                <div className="font-mono text-[8px] tracking-[0.2em] uppercase text-fog/40 mt-1">AI Uptime</div>
-              </div>
+          {/* Right: Visual showcase - Flowing Node Graph */}
+          <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
+            <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
+              <FlowingNodeGraph />
             </div>
           </div>
         </div>

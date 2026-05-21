@@ -1,74 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { expertise as services } from '../data/expertise';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const services = [
-  {
-    num: '01',
-    title: 'Agentic AI',
-    category: 'INTELLIGENCE / AUTOMATION',
-    description: 'Autonomous AI agents that reason, plan, and execute complex workflows — transforming operations with intelligent automation that adapts in real time.',
-    icon: '⚡',
-  },
-  {
-    num: '02',
-    title: 'Computer Vision',
-    category: 'ANALYSIS / DIAGNOSTICS',
-    description: 'From medical imaging to quality control — our vision solutions turn visual data into actionable, real-time insights.',
-    icon: '👁',
-  },
-  {
-    num: '03',
-    title: 'Web Applications',
-    category: 'PERFORMANCE / SCALE',
-    description: 'High-performance, responsive web applications built with modern frameworks — delivering seamless user experiences that scale.',
-    icon: '◈',
-  },
-  {
-    num: '04',
-    title: 'Mobile Apps',
-    category: 'CROSS-PLATFORM / NATIVE',
-    description: 'Cross-platform mobile applications for iOS and Android — built for performance, accessibility, and native-quality experiences.',
-    icon: '📱',
-  },
-  {
-    num: '05',
-    title: 'Data Pipelines',
-    category: 'INGESTION / FLOW',
-    description: 'End-to-end data pipeline engineering — ingestion, transformation, and orchestration for reliable data flow.',
-    icon: '⟐',
-  },
-  {
-    num: '06',
-    title: 'Data Warehousing',
-    category: 'STORAGE / ANALYTICS',
-    description: 'Scalable data warehouses that unify your data sources, enabling fast analytics and data-driven decisions.',
-    icon: '⬡',
-  },
-  {
-    num: '07',
-    title: 'DevOps & Cloud',
-    category: 'CI-CD / INFRASTRUCTURE',
-    description: 'CI/CD pipelines, infrastructure as code, container orchestration, and cloud architecture for resilient systems.',
-    icon: '☁',
-  },
-  {
-    num: '08',
-    title: 'AI & ML Solutions',
-    category: 'MODELS / NLP',
-    description: 'Custom ML models, NLP systems, and generative AI tailored to your domain — data as competitive advantage.',
-    icon: '🧠',
-  },
-  {
-    num: '09',
-    title: 'Compliance',
-    category: 'HIPAA / SOC 2 / GDPR',
-    description: 'HIPAA, SOC 2, and GDPR-ready architectures — secure data handling, encryption, and audit logging built in.',
-    icon: '🛡',
-  }
-];
 
 export default function ServicesSection() {
   const [activeService, setActiveService] = useState<number>(0);
@@ -121,7 +56,7 @@ export default function ServicesSection() {
     );
   }, [activeService]);
 
-  const active = services[activeService];
+  const active = services[activeService] || services[0];
 
   return (
     <section
@@ -151,58 +86,111 @@ export default function ServicesSection() {
           <div ref={listRef} className="lg:col-span-5">
             <div className="space-y-0">
               {services.map((service, i) => (
-                <div
-                  key={service.num}
-                  className={`service-item group flex items-center gap-6 py-5 border-b border-white/5 cursor-pointer transition-all duration-500 ${
-                    activeService === i
-                      ? 'border-saffron/30'
-                      : 'hover:border-white/15'
-                  }`}
-                  onMouseEnter={() => setActiveService(i)}
-                  onClick={() => setSelectedService(service.title)}
-                >
-                  <span className={`font-mono text-[10px] tracking-[0.2em] transition-colors duration-300 ${
-                    activeService === i ? 'text-saffron' : 'text-fog/30'
-                  }`}>
-                    {service.num}
-                  </span>
-
-                  <div className="flex-1">
-                    <h3 className={`font-display text-xl lg:text-2xl transition-all duration-500 ${
+                <div key={service.num} className="flex flex-col border-b border-white/5">
+                  <div
+                    className={`service-item group flex items-center gap-6 py-5 cursor-pointer transition-all duration-500 ${
                       activeService === i
-                        ? 'text-parchment translate-x-2'
-                        : 'text-fog/40 group-hover:text-fog/70'
+                        ? 'lg:border-saffron/30'
+                        : 'hover:border-white/15'
+                    }`}
+                    onMouseEnter={() => window.innerWidth >= 1024 && setActiveService(i)}
+                    onClick={() => {
+                      if (window.innerWidth >= 1024) {
+                        setSelectedService(service.title);
+                      } else {
+                        setActiveService(activeService === i ? -1 : i);
+                      }
+                    }}
+                  >
+                    <span className={`font-mono text-[10px] tracking-[0.2em] transition-colors duration-300 ${
+                      activeService === i ? 'text-saffron' : 'text-fog/30'
                     }`}>
-                      {service.title}
-                    </h3>
+                      {service.num}
+                    </span>
+
+                    <div className="flex-1">
+                      <h3 className={`font-display text-xl lg:text-2xl transition-all duration-500 ${
+                        activeService === i
+                          ? 'text-parchment translate-x-2'
+                          : 'text-fog/40 group-hover:text-fog/70'
+                      }`}>
+                        {service.title}
+                      </h3>
+                    </div>
+
+                    {/* Active indicator */}
+                    <div className={`hidden lg:block w-2 h-2 rounded-full transition-all duration-500 ${
+                      activeService === i
+                        ? 'bg-saffron scale-100'
+                        : 'bg-transparent scale-0'
+                    }`} />
+
+                    {/* Arrow / Plus-Minus for mobile */}
+                    <svg
+                      width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                      className={`hidden lg:block transition-all duration-500 ${
+                        activeService === i
+                          ? 'text-saffron opacity-100 translate-x-0'
+                          : 'text-fog/20 opacity-0 -translate-x-2'
+                      }`}
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                    
+                    {/* Mobile toggle icon */}
+                    <div className={`lg:hidden w-6 h-6 flex items-center justify-center transition-transform duration-300 ${activeService === i ? 'rotate-180 text-saffron' : 'text-fog/40'}`}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </div>
                   </div>
 
-                  {/* Active indicator */}
-                  <div className={`w-2 h-2 rounded-full transition-all duration-500 ${
-                    activeService === i
-                      ? 'bg-saffron scale-100'
-                      : 'bg-transparent scale-0'
-                  }`} />
+                  {/* Mobile Accordion Detail Content */}
+                  <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${activeService === i ? 'max-h-[800px] opacity-100 pb-6' : 'max-h-0 opacity-0'}`}>
+                    <div className="pl-[52px] pr-4 space-y-5">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">{service.icon}</span>
+                        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/60">
+                          {service.category}
+                        </span>
+                      </div>
+                      
+                      <p className="font-body text-fog/60 text-sm leading-relaxed">
+                        {service.description}
+                      </p>
 
-                  {/* Arrow */}
-                  <svg
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-                    className={`transition-all duration-500 ${
-                      activeService === i
-                        ? 'text-saffron opacity-100 translate-x-0'
-                        : 'text-fog/20 opacity-0 -translate-x-2'
-                    }`}
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedService(service.title);
+                        }}
+                        className="group relative inline-flex items-center gap-3 px-6 py-3 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                        <span className="relative z-10">Request</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </button>
+                      
+                      <div className="grid grid-cols-3 gap-2 mt-4">
+                        {['React', 'Python', 'AWS', 'TensorFlow', 'Node.js', 'K8s'].map((tech) => (
+                          <div key={tech} className="text-center py-2 border border-white/5 font-mono text-[8px] tracking-widest uppercase text-fog/30">
+                            {tech}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Right: Detail Panel */}
-          <div className="lg:col-span-7 relative">
+          <div className="hidden lg:block lg:col-span-7 relative">
             <div className="lg:sticky lg:top-32">
               <div
                 ref={detailRef}
@@ -282,7 +270,7 @@ export default function ServicesSection() {
                 <select
                   value={selectedService}
                   onChange={(e) => setSelectedService(e.target.value)}
-                  className="w-full bg-transparent border-b border-white/20 pb-2 text-saffron font-mono text-[11px] uppercase tracking-widest focus:border-saffron focus:outline-none transition-colors appearance-none cursor-pointer"
+                  className="w-full bg-transparent border-b border-white/20 pb-2 text-saffron font-mono text-[16px] md:text-[11px] uppercase tracking-widest focus:border-saffron focus:outline-none transition-colors appearance-none cursor-pointer"
                 >
                   {services.map((s) => (
                     <option key={s.num} value={s.title} className="bg-obsidian text-parchment">
@@ -293,19 +281,19 @@ export default function ServicesSection() {
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Name</label>
-                <input required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Business Name</label>
-                <input required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Contact Number</label>
-                <input required type="tel" className="w-full bg-transparent border-b border-white/20 pb-2 text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input required type="tel" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Email</label>
-                <input required type="email" className="w-full bg-transparent border-b border-white/20 pb-2 text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input required type="email" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
 
               <button type="submit" className="w-full mt-8 relative overflow-hidden group/btn px-8 py-4 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian">

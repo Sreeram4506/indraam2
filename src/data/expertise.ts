@@ -1,0 +1,65 @@
+export const expertise = [
+  {
+    num: '01',
+    title: 'Agentic AI',
+    category: 'INTELLIGENCE / AUTOMATION',
+    description: 'Autonomous AI agents that reason, plan, and execute complex workflows — transforming operations with intelligent automation that adapts in real time.',
+    icon: '⚡',
+  },
+  {
+    num: '02',
+    title: 'Computer Vision',
+    category: 'ANALYSIS / DIAGNOSTICS',
+    description: 'From medical imaging to quality control — our vision solutions turn visual data into actionable, real-time insights.',
+    icon: '👁',
+  },
+  {
+    num: '03',
+    title: 'Web Applications',
+    category: 'PERFORMANCE / SCALE',
+    description: 'High-performance, responsive web applications built with modern frameworks — delivering seamless user experiences that scale.',
+    icon: '◈',
+  },
+  {
+    num: '04',
+    title: 'Mobile Apps',
+    category: 'CROSS-PLATFORM / NATIVE',
+    description: 'Cross-platform mobile applications for iOS and Android — built for performance, accessibility, and native-quality experiences.',
+    icon: '📱',
+  },
+  {
+    num: '05',
+    title: 'Data Pipelines',
+    category: 'INGESTION / FLOW',
+    description: 'End-to-end data pipeline engineering — ingestion, transformation, and orchestration for reliable data flow.',
+    icon: '⟐',
+  },
+  {
+    num: '06',
+    title: 'Data Warehousing',
+    category: 'STORAGE / ANALYTICS',
+    description: 'Scalable data warehouses that unify your data sources, enabling fast analytics and data-driven decisions.',
+    icon: '⬡',
+  },
+  {
+    num: '07',
+    title: 'DevOps & Cloud',
+    category: 'CI-CD / INFRASTRUCTURE',
+    description: 'CI/CD pipelines, infrastructure as code, container orchestration, and cloud architecture for resilient systems.',
+    icon: '☁',
+  },
+  {
+    num: '08',
+    title: 'AI & ML Solutions',
+    category: 'MODELS / NLP',
+    description: 'Custom ML models, NLP systems, and generative AI tailored to your domain — data as competitive advantage.',
+    icon: '🧠',
+  },
+  {
+    num: '09',
+    title: 'Automations',
+    category: 'WORKFLOW / EFFICIENCY',
+    description: 'Custom automation solutions that streamline repetitive tasks, reduce human error, and accelerate business velocity through intelligent scripting and integration.',
+    icon: '⚙',
+  }
+];

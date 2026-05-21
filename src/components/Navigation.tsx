@@ -11,7 +11,7 @@ interface NavigationProps {
 
 export default function Navigation({ visible }: NavigationProps) {
   const navRef = useRef<HTMLElement>(null);
-  const logoRef = useRef<HTMLButtonElement>(null);
+  const logoRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [scrolled, setScrolled] = useState(false);
@@ -88,26 +88,26 @@ export default function Navigation({ visible }: NavigationProps) {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 opacity-0 -translate-y-2 transition-all duration-500 ${
-        scrolled ? 'bg-obsidian/80 backdrop-blur-xl border-b border-white/5' : ''
+      className={`fixed top-0 left-0 right-0 z-50 opacity-0 -translate-y-2 transition-all duration-700 bg-transparent ${
+        scrolled ? 'py-2' : 'py-4'
       }`}
       style={{ padding: '0 5vw' }}
     >
-      <div className="flex items-center justify-between h-20 relative">
+      <div className="flex items-center justify-between h-16 relative">
         {/* Left Side Items */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-12">
           {navItems.slice(0, 2).map((item) => (
             <button
               key={item.id}
               onClick={() => scrollTo(item.id)}
-              className={`relative font-mono text-[10px] uppercase tracking-[0.14em] transition-all duration-300 group ${
+              className={`relative font-mono text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group ${
                 activeSection === item.id
                   ? 'text-saffron'
-                  : 'text-fog/50 hover:text-parchment'
+                  : 'text-fog/40 hover:text-parchment'
               }`}
             >
               {item.label}
-              <span className={`absolute -bottom-1.5 left-0 h-[1px] bg-saffron transition-all duration-500 ${
+              <span className={`absolute -bottom-1 left-0 h-[1px] bg-saffron transition-all duration-500 ${
                 activeSection === item.id ? 'w-full' : 'w-0 group-hover:w-full'
               }`} />
             </button>
@@ -116,27 +116,30 @@ export default function Navigation({ visible }: NavigationProps) {
 
         {/* Center Logo */}
         <button
-          ref={logoRef}
           onClick={() => scrollTo('hero')}
-          className="absolute left-1/2 -translate-x-1/2 font-display text-lg tracking-[0.3em] text-parchment hover:text-saffron transition-colors duration-300 pointer-events-auto"
+          className={`absolute left-1/2 -translate-x-1/2 font-display text-lg tracking-[0.4em] text-parchment hover:text-saffron transition-all duration-1000 pointer-events-auto ${
+            scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'
+          }`}
         >
-          INDRAAM
+          <span ref={logoRef} className="block origin-center transition-transform duration-75">
+            INDRAAM
+          </span>
         </button>
 
         {/* Right Side Items */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-12">
           {navItems.slice(2).map((item) => (
             <button
               key={item.id}
               onClick={() => scrollTo(item.id)}
-              className={`relative font-mono text-[10px] uppercase tracking-[0.14em] transition-all duration-300 group ${
+              className={`relative font-mono text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group ${
                 activeSection === item.id
                   ? 'text-saffron'
-                  : 'text-fog/50 hover:text-parchment'
+                  : 'text-fog/40 hover:text-parchment'
               }`}
             >
               {item.label}
-              <span className={`absolute -bottom-1.5 left-0 h-[1px] bg-saffron transition-all duration-500 ${
+              <span className={`absolute -bottom-1 left-0 h-[1px] bg-saffron transition-all duration-500 ${
                 activeSection === item.id ? 'w-full' : 'w-0 group-hover:w-full'
               }`} />
             </button>

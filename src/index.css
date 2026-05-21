@@ -121,6 +121,16 @@
     z-index: 9999;
   }
 
+  @media (max-width: 768px) {
+    .noise-overlay {
+      opacity: 0.015;
+    }
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   /* Grid background */
   .bg-grid {
     background-size: 60px 60px;

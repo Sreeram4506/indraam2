@@ -103,6 +103,15 @@ export default function WorkSection() {
 
         if (!videoContainer || !video || !content || !num || !button) return;
 
+        // 0. Pin the project in the center so the user can watch the video and read info
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'center center',
+          end: '+=100%', // Pins for one viewport height
+          pin: true,
+          pinSpacing: true,
+        });
+
         // 1. 3D Tilt reveal for video container - NOW SCRUBBED
         gsap.fromTo(videoContainer,
           { 
@@ -214,19 +223,22 @@ export default function WorkSection() {
         );
 
         // Subtle Title Magnetic interaction on the whole row
+        let titleXTo: any, titleYTo: any, titleRotTo: any;
+        if (projectTitle) {
+          titleXTo = gsap.quickTo(projectTitle, 'x', { duration: 1, ease: 'power2.out' });
+          titleYTo = gsap.quickTo(projectTitle, 'y', { duration: 1, ease: 'power2.out' });
+          titleRotTo = gsap.quickTo(projectTitle, 'rotate', { duration: 1, ease: 'power2.out' });
+        }
+
         const handleTitleMove = (e: MouseEvent) => {
-           if (!projectTitle) return;
+           if (!projectTitle || !titleXTo) return;
            const rect = el.getBoundingClientRect();
            const relX = (e.clientX - rect.left) / rect.width - 0.5;
            const relY = (e.clientY - rect.top) / rect.height - 0.5;
            
-           gsap.to(projectTitle, {
-              x: relX * 30,
-              y: relY * 20,
-              rotate: relX * 2,
-              duration: 1,
-              ease: 'power2.out'
-           });
+           titleXTo(relX * 30);
+           titleYTo(relY * 20);
+           titleRotTo(relX * 2);
         };
         el.addEventListener('mousemove', handleTitleMove);
         el.addEventListener('mouseleave', () => {
@@ -234,8 +246,14 @@ export default function WorkSection() {
         });
 
         // 5. Magnetic Button Effect (Simulated via mouse move on the parent row)
+        let btnXTo: any, btnYTo: any;
+        if (button) {
+          btnXTo = gsap.quickTo(button, 'x', { duration: 0.6, ease: 'power2.out' });
+          btnYTo = gsap.quickTo(button, 'y', { duration: 0.6, ease: 'power2.out' });
+        }
+
         const handleMouseMove = (e: MouseEvent) => {
-          if (!button) return;
+          if (!button || !btnXTo) return;
           const rect = button.getBoundingClientRect();
           const btnX = rect.left + rect.width / 2;
           const btnY = rect.top + rect.height / 2;
@@ -245,14 +263,10 @@ export default function WorkSection() {
           const dist = Math.sqrt(dx*dx + dy*dy);
           
           if (dist < 150) {
-            gsap.to(button, {
-              x: dx * 0.3,
-              y: dy * 0.3,
-              duration: 0.6,
-              ease: 'power2.out'
-            });
+            btnXTo(dx * 0.3);
+            btnYTo(dy * 0.3);
           } else {
-            gsap.to(button, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.3)' });
+            gsap.to(button, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.3)', overwrite: 'auto' });
           }
         };
         el.addEventListener('mousemove', handleMouseMove);
@@ -331,7 +345,7 @@ export default function WorkSection() {
             <div
               key={project.num}
               ref={(el) => { projectRefs.current[i] = el; }}
-              className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-16 md:gap-32 items-center`}
+              className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-10 md:gap-32 items-center bg-white/[0.02] backdrop-blur-sm border border-white/5 rounded-2xl p-6 md:bg-transparent md:backdrop-blur-none md:border-none md:p-0 md:rounded-none`}
             >
               {/* Video Wrap with 3D Container */}
               <div className="video-container relative w-full md:w-[65%] aspect-[16/9] overflow-hidden group perspective-1000 will-change-transform">
@@ -346,7 +360,7 @@ export default function WorkSection() {
                     muted
                     loop
                     playsInline
-                    preload="auto"
+                    preload="none"
                     className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-110 transition-all duration-1000 ease-out will-change-transform"
                   >
                     <source src={project.video} type="video/mp4" />
@@ -391,10 +405,16 @@ export default function WorkSection() {
                 
                 <button 
                   onClick={() => navigate(`/project/${project.num}`)}
-                  className="project-button group relative flex items-center justify-center w-32 h-32 rounded-full border border-white/10 hover:border-saffron hover:bg-saffron hover:text-obsidian transition-all duration-500 overflow-hidden cursor-pointer"
+                  className="project-button hidden md:flex group relative items-center justify-center w-32 h-32 rounded-full border border-white/10 hover:border-saffron hover:bg-saffron hover:text-obsidian transition-all duration-500 overflow-hidden cursor-pointer"
                 >
                    <span className="relative z-10 font-mono text-[9px] uppercase tracking-widest font-bold">Explore</span>
                    <div className="absolute inset-0 bg-saffron scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500" />
+                </button>
+                <button
+                  onClick={() => navigate(`/project/${project.num}`)}
+                  className="md:hidden w-full mt-4 py-4 border border-saffron/30 bg-saffron/5 text-saffron font-mono text-[10px] uppercase tracking-widest text-center"
+                >
+                  Explore Project
                 </button>
               </div>
             </div>
