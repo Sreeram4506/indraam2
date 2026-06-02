@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { expertise as services } from '../data/expertise';
+import { addInterest } from '../lib/interests';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,6 +58,24 @@ export default function ServicesSection() {
   }, [activeService]);
 
   const active = services[activeService] || services[0];
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    addInterest({
+      source: 'expertise',
+      service: String(formData.get('service') || selectedService || ''),
+      name: String(formData.get('name') || '').trim(),
+      businessName: String(formData.get('businessName') || '').trim(),
+      contactNumber: String(formData.get('contactNumber') || '').trim(),
+      email: String(formData.get('email') || '').trim(),
+    });
+
+    alert('Request submitted!');
+    e.currentTarget.reset();
+    setSelectedService(null);
+  };
 
   return (
     <section
@@ -175,13 +194,6 @@ export default function ServicesSection() {
                         </svg>
                       </button>
                       
-                      <div className="grid grid-cols-3 gap-2 mt-4">
-                        {['React', 'Python', 'AWS', 'TensorFlow', 'Node.js', 'K8s'].map((tech) => (
-                          <div key={tech} className="text-center py-2 border border-white/5 font-mono text-[8px] tracking-widest uppercase text-fog/30">
-                            {tech}
-                          </div>
-                        ))}
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -237,14 +249,6 @@ export default function ServicesSection() {
                 </div>
               </div>
 
-              {/* Tech stack preview */}
-              <div className="mt-6 grid grid-cols-3 gap-3">
-                {['React', 'Python', 'AWS', 'TensorFlow', 'Node.js', 'K8s'].map((tech) => (
-                  <div key={tech} className="text-center py-3 border border-white/5 font-mono text-[9px] tracking-widest uppercase text-fog/30 hover:text-saffron/50 hover:border-saffron/10 transition-all duration-300">
-                    {tech}
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
@@ -264,10 +268,11 @@ export default function ServicesSection() {
 
             <h3 className="font-display text-2xl text-parchment mb-8">Request Expertise</h3>
 
-            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert('Request submitted!'); setSelectedService(null); }}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Service</label>
                 <select
+                  name="service"
                   value={selectedService}
                   onChange={(e) => setSelectedService(e.target.value)}
                   className="w-full bg-transparent border-b border-white/20 pb-2 text-saffron font-mono text-[16px] md:text-[11px] uppercase tracking-widest focus:border-saffron focus:outline-none transition-colors appearance-none cursor-pointer"
@@ -281,19 +286,19 @@ export default function ServicesSection() {
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Name</label>
-                <input required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="name" required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Business Name</label>
-                <input required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="businessName" required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Contact Number</label>
-                <input required type="tel" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="contactNumber" required type="tel" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Email</label>
-                <input required type="email" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="email" required type="email" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
 
               <button type="submit" className="w-full mt-8 relative overflow-hidden group/btn px-8 py-4 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian">

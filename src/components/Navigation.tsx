@@ -192,7 +192,6 @@ export default function Navigation({ visible }: NavigationProps) {
             {item.label}
           </button>
         ))}
-
         <div className="mt-12 flex flex-col items-center gap-3" style={{
           transitionDelay: menuOpen ? '400ms' : '0ms',
           opacity: menuOpen ? 1 : 0,

@@ -70,15 +70,10 @@ export default function ProjectDetails() {
         </div>
 
         <div className="w-full aspect-[16/9] border border-white/10 relative overflow-hidden">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src={project.video} type="video/mp4" />
-          </video>
+          <div className="w-full h-full bg-gradient-to-br from-obsidian via-ink to-obsidian/90 flex flex-col items-center justify-center text-center px-6">
+            <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-saffron/70 mb-3">Project Visual</span>
+            <span className="font-display text-[clamp(28px,4vw,56px)] leading-none text-parchment">Coming Soon</span>
+          </div>
           <div className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-30" style={{ backgroundColor: project.color }} />
         </div>
       </div>

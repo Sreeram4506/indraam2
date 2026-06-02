@@ -4,6 +4,7 @@ import Preloader from './components/Preloader';
 
 const Home = lazy(() => import('./pages/Home'));
 const ProjectDetails = lazy(() => import('./pages/ProjectDetails'));
+const Admin = lazy(() => import('./pages/Admin'));
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/project/:id" element={<ProjectDetails />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </Suspense>
   )

@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 import { useNavigate } from 'react-router';
 import { projects } from '../data/projects';
+import { addInterest } from '../lib/interests';
 
 export default function WorkSection() {
   const navigate = useNavigate();
@@ -13,6 +14,19 @@ export default function WorkSection() {
   const headerRef = useRef<HTMLDivElement>(null);
   const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
   const backgroundAccentRef = useRef<HTMLDivElement>(null);
+  const trackPortfolioInterest = (project: (typeof projects)[number]) => {
+    addInterest({
+      source: 'portfolio',
+      projectNum: project.num,
+      projectTitle: project.title,
+      projectCategory: project.category,
+    });
+  };
+
+  const handleExploreProject = (project: (typeof projects)[number]) => {
+    trackPortfolioInterest(project);
+    navigate(`/project/${project.num}`);
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -96,12 +110,12 @@ export default function WorkSection() {
         if (!el) return;
 
         const videoContainer = el.querySelector('.video-container');
-        const video = el.querySelector('video');
+        const media = el.querySelector('.portfolio-media');
         const content = el.querySelector('.project-content');
         const num = el.querySelector('.project-num');
         const button = el.querySelector('.project-button');
 
-        if (!videoContainer || !video || !content || !num || !button) return;
+        if (!videoContainer || !media || !content || !num || !button) return;
 
         // 0. Pin the project in the center so the user can watch the video and read info
         ScrollTrigger.create({
@@ -137,8 +151,8 @@ export default function WorkSection() {
           }
         );
 
-        // 2. Continuous Parallax for video inside
-        gsap.fromTo(video,
+        // 2. Continuous Parallax for media inside
+        gsap.fromTo(media,
           { yPercent: -15, scale: 1.2 },
           {
             yPercent: 15,
@@ -272,31 +286,6 @@ export default function WorkSection() {
         el.addEventListener('mousemove', handleMouseMove);
       });
 
-      // PERFORMANCE OPTIMIZATION: Pause videos when out of view
-      const videoObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const video = entry.target as HTMLVideoElement;
-            if (entry.isIntersecting) {
-              video.play().catch(() => {});
-            } else {
-              video.pause();
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
-
-      projectRefs.current.forEach((el) => {
-        if (!el) return;
-        const video = el.querySelector('video');
-        if (video) videoObserver.observe(video);
-      });
-
-      // Cleanup observer on unmount
-      return () => {
-        videoObserver.disconnect();
-      };
     }, section);
 
     return () => ctx.revert();
@@ -356,15 +345,10 @@ export default function WorkSection() {
                 />
                 
                 <div className="relative w-full h-full overflow-hidden border border-white/5 group-hover:border-white/20 transition-colors duration-700">
-                  <video
-                    muted
-                    loop
-                    playsInline
-                    preload="none"
-                    className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-110 transition-all duration-1000 ease-out will-change-transform"
-                  >
-                    <source src={project.video} type="video/mp4" />
-                  </video>
+                  <div className="portfolio-media w-full h-full bg-gradient-to-br from-obsidian via-ink to-obsidian/90 flex flex-col items-center justify-center text-center px-6 will-change-transform">
+                    <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-saffron/70 mb-3">Portfolio</span>
+                    <span className="font-display text-[clamp(26px,4vw,52px)] leading-none text-parchment">Coming Soon</span>
+                  </div>
                   
                   {/* Scanline / Grain Overlay */}
                   <div className="absolute inset-0 bg-white/[0.03] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
@@ -404,14 +388,14 @@ export default function WorkSection() {
                 </p>
                 
                 <button 
-                  onClick={() => navigate(`/project/${project.num}`)}
+                  onClick={() => handleExploreProject(project)}
                   className="project-button hidden md:flex group relative items-center justify-center w-32 h-32 rounded-full border border-white/10 hover:border-saffron hover:bg-saffron hover:text-obsidian transition-all duration-500 overflow-hidden cursor-pointer"
                 >
                    <span className="relative z-10 font-mono text-[9px] uppercase tracking-widest font-bold">Explore</span>
                    <div className="absolute inset-0 bg-saffron scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500" />
                 </button>
                 <button
-                  onClick={() => navigate(`/project/${project.num}`)}
+                  onClick={() => handleExploreProject(project)}
                   className="md:hidden w-full mt-4 py-4 border border-saffron/30 bg-saffron/5 text-saffron font-mono text-[10px] uppercase tracking-widest text-center"
                 >
                   Explore Project
