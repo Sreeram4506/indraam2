@@ -12,25 +12,43 @@ import CustomCursor from '../components/CustomCursor';
 import Preloader from '../components/Preloader';
 
 export default function Home() {
-  const [preloaderDone, setPreloaderDone] = useState(false);
+  const [preloaderDone, setPreloaderDone] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.sessionStorage.getItem('indraam_preloader_seen') === '1';
+  });
   const [entranceComplete, setEntranceComplete] = useState(false);
+  const [cursorEnabled, setCursorEnabled] = useState(false);
 
   useLenis();
 
   useEffect(() => {
     if (preloaderDone) {
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem('indraam_preloader_seen', '1');
+      }
+
       // Trigger entrance animations after preloader
-      setTimeout(() => {
+      const entranceTimer = window.setTimeout(() => {
         setEntranceComplete(true);
         ScrollTrigger.refresh();
-      }, 100);
+      }, 60);
+
+      const cursorTimer = window.setTimeout(() => {
+        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        setCursorEnabled(isDesktop && !reduceMotion);
+      }, 300);
 
       // Refresh again after layout settles
-      const timer = setTimeout(() => {
+      const timer = window.setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 800);
+      }, 500);
 
-      return () => clearTimeout(timer);
+      return () => {
+        window.clearTimeout(entranceTimer);
+        window.clearTimeout(cursorTimer);
+        window.clearTimeout(timer);
+      };
     }
   }, [preloaderDone]);
 
@@ -42,7 +60,7 @@ export default function Home() {
         const id = hash.replace('#', '');
         const el = document.getElementById(id);
         if (el) {
-          setTimeout(() => {
+          window.setTimeout(() => {
             el.scrollIntoView({ behavior: 'smooth' });
           }, 300);
         }
@@ -57,7 +75,7 @@ export default function Home() {
         <Preloader onComplete={() => setPreloaderDone(true)} />
       )}
 
-      <CustomCursor />
+      {cursorEnabled && <CustomCursor />}
       <div className="noise-overlay" />
       <Navigation visible={preloaderDone} />
 

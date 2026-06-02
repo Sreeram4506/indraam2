@@ -4,30 +4,25 @@ import gsap from 'gsap';
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
+  const isHoveringRef = useRef(false);
   const [cursorLabel, setCursorLabel] = useState('');
 
   useEffect(() => {
     const dot = dotRef.current;
     const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    const moveDotTo = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power2.out' });
+    const moveDotYTo = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power2.out' });
+    const moveRingTo = gsap.quickTo(ring, 'x', { duration: 0.32, ease: 'power2.out' });
+    const moveRingYTo = gsap.quickTo(ring, 'y', { duration: 0.32, ease: 'power2.out' });
 
     const onMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
-
-      gsap.to(dot, {
-        x: clientX,
-        y: clientY,
-        duration: 0.08,
-        ease: 'power2.out',
-      });
-
-      gsap.to(ring, {
-        x: clientX,
-        y: clientY,
-        duration: 0.35,
-        ease: 'power2.out',
-      });
+      moveDotTo(clientX);
+      moveDotYTo(clientY);
+      moveRingTo(clientX);
+      moveRingYTo(clientY);
     };
 
     const onMouseDown = () => {
@@ -36,7 +31,7 @@ export default function CustomCursor() {
     };
 
     const onMouseUp = () => {
-      gsap.to(ring, { scale: isHovering ? 2 : 1, duration: 0.3, ease: 'elastic.out(1, 0.4)' });
+      gsap.to(ring, { scale: isHoveringRef.current ? 2 : 1, duration: 0.3, ease: 'elastic.out(1, 0.4)' });
       gsap.to(dot, { scale: 1, duration: 0.3 });
     };
 
@@ -49,7 +44,7 @@ export default function CustomCursor() {
         target.classList.contains('cursor-pointer');
 
       if (interactive) {
-        setIsHovering(true);
+        isHoveringRef.current = true;
 
         // Check for data-cursor-label
         const labelEl = target.closest('[data-cursor]') as HTMLElement;
@@ -81,7 +76,7 @@ export default function CustomCursor() {
         target.classList.contains('cursor-pointer');
 
       if (interactive) {
-        setIsHovering(false);
+        isHoveringRef.current = false;
         setCursorLabel('');
 
         gsap.to(ring, {
@@ -113,7 +108,7 @@ export default function CustomCursor() {
       document.body.removeEventListener('mouseover', onMouseOver);
       document.body.removeEventListener('mouseout', onMouseOut);
     };
-  }, [isHovering]);
+  }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
@@ -129,7 +124,6 @@ export default function CustomCursor() {
       >
         {/* Label */}
         <span
-          ref={labelRef}
           className={`font-mono text-[7px] uppercase tracking-widest text-saffron transition-opacity duration-300 whitespace-nowrap ${
             cursorLabel ? 'opacity-100' : 'opacity-0'
           }`}

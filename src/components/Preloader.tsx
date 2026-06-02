@@ -23,9 +23,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           clearInterval(progressInterval);
           return 100;
         }
-        return Math.min(p + Math.random() * 8 + 2, 100);
+        return Math.min(p + Math.random() * 16 + 8, 100);
       });
-    }, 80);
+    }, 120);
 
     // Master timeline
     const tl = gsap.timeline({
@@ -79,26 +79,26 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         rotateX: -90,
         opacity: 0,
       },
-      {
-        y: 0,
-        rotateX: 0,
-        opacity: 1,
-        duration: 1.2,
-        stagger: 0.08,
-        ease: 'expo.out',
-      },
-      0.3
+        {
+          y: 0,
+          rotateX: 0,
+          opacity: 1,
+          duration: 0.85,
+          stagger: 0.05,
+          ease: 'expo.out',
+        },
+      0.2
     );
 
     // Progress line animation
     tl.fromTo(lineRef.current,
       { scaleX: 0 },
-      { scaleX: 1, duration: 2.5, ease: 'power1.inOut' },
-      0.5
+      { scaleX: 1, duration: 1.2, ease: 'power1.inOut' },
+      0.35
     );
 
     // Hold
-    tl.to({}, { duration: 0.5 });
+    tl.to({}, { duration: 0.15 });
 
     return () => {
       clearInterval(progressInterval);

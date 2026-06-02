@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState } from 'react';
-import ParticleText from '../components/ParticleText';
-import FlowingNodeGraph from '../components/FlowingNodeGraph';
+import { lazy, Suspense, useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+const ParticleText = lazy(() => import('../components/ParticleText'));
+const FlowingNodeGraph = lazy(() => import('../components/FlowingNodeGraph'));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -132,7 +133,9 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             {/* Main headline - Particle text on desktop, styled text on mobile */}
             {!isMobile ? (
               <div className="w-full h-[120px] mb-4">
-                <ParticleText text="INDRAAM STUDIO" fontSize={80} align="left" />
+                <Suspense fallback={<div className="w-full h-full" />}>
+                  <ParticleText text="INDRAAM STUDIO" fontSize={80} align="left" />
+                </Suspense>
               </div>
             ) : null}
 
@@ -199,7 +202,9 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
           {/* Right: Visual showcase - Flowing Node Graph */}
           <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
             <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
-              <FlowingNodeGraph />
+              <Suspense fallback={<div className="w-full h-full" />}>
+                <FlowingNodeGraph />
+              </Suspense>
             </div>
           </div>
         </div>

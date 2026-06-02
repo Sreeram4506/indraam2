@@ -13,14 +13,14 @@ export function useLenis() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.08,
+      lerp: 0.09,
       smoothWheel: true,
     });
     lenisInstance = lenis;
+    lenis.on('scroll', ScrollTrigger.update);
 
     function raf(time: number) {
       lenis.raf(time);
-      ScrollTrigger.update();
       rafId.current = requestAnimationFrame(raf);
     }
     rafId.current = requestAnimationFrame(raf);
