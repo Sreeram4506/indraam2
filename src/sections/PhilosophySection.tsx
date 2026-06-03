@@ -41,6 +41,10 @@ export default function PhilosophySection() {
     const section = sectionRef.current;
     if (!section) return;
 
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches || 
+                     ('ontouchstart' in window) || 
+                     (navigator.maxTouchPoints > 0);
+
     const ctx = gsap.context(() => {
       // Header entrance
       if (headerRef.current) {
@@ -96,73 +100,120 @@ export default function PhilosophySection() {
           }
         );
 
-        // Hover parallax on principles
-        const handleMove = (e: MouseEvent) => {
-          const rect = el.getBoundingClientRect();
-          const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
-          const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
-          gsap.to(el, { x, y, duration: 0.5, ease: 'power2.out' });
-        };
-        const handleLeave = () => {
-          gsap.to(el, { x: 0, y: 0, duration: 1, ease: 'elastic.out(1, 0.3)' });
-        };
-        el.addEventListener('mousemove', handleMove);
-        el.addEventListener('mouseleave', handleLeave);
+        if (!isMobile) {
+          // Hover parallax on principles (desktop only)
+          const handleMove = (e: MouseEvent) => {
+            const rect = el.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+            const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
+            gsap.to(el, { x, y, duration: 0.5, ease: 'power2.out' });
+          };
+          const handleLeave = () => {
+            gsap.to(el, { x: 0, y: 0, duration: 1, ease: 'elastic.out(1, 0.3)' });
+          };
+          el.addEventListener('mousemove', handleMove);
+          el.addEventListener('mouseleave', handleLeave);
+          
+          // Cleanup function store on element (optional or handled in revert)
+        }
       });
 
       // Manifesto text reveal
       if (manifestoRef.current) {
         const words = manifestoRef.current.querySelectorAll('.manifesto-word');
-        gsap.fromTo(words,
-          { opacity: 0.1 },
-          {
-            opacity: 1,
-            stagger: 0.05,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: manifestoRef.current,
-              start: 'top 80%',
-              end: 'bottom 40%',
-              scrub: true,
+        if (isMobile) {
+          // Simple stagger entrance on mobile (no laggy scroll scrub)
+          gsap.fromTo(words,
+            { opacity: 0.1, y: 10 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.02,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: manifestoRef.current,
+                start: 'top 85%',
+              }
             }
-          }
-        );
+          );
+        } else {
+          // Precise scrub on desktop
+          gsap.fromTo(words,
+            { opacity: 0.1 },
+            {
+              opacity: 1,
+              stagger: 0.05,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: manifestoRef.current,
+                start: 'top 80%',
+                end: 'bottom 40%',
+                scrub: true,
+              }
+            }
+          );
+        }
       }
 
       // Word parallax
       wordRefs.current.forEach((el, i) => {
         if (!el) return;
-        const xMove = i % 2 === 0 ? -120 : 120;
-        gsap.fromTo(el,
-          { opacity: 0, x: xMove, scale: 0.9, filter: 'blur(8px)' },
-          {
-            opacity: 0.6, x: 0, scale: 1, filter: 'blur(0px)',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true
+        
+        if (isMobile) {
+          // Simple fade & slide up on mobile without filter/blur and scrub
+          gsap.fromTo(el,
+            { opacity: 0, y: 40 },
+            {
+              opacity: 0.25,
+              y: 0,
+              duration: 1.2,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 90%',
+              }
             }
-          }
-        );
+          );
+        } else {
+          // Desktop scrub with filter blur
+          const xMove = i % 2 === 0 ? -120 : 120;
+          gsap.fromTo(el,
+            { opacity: 0, x: xMove, scale: 0.9, filter: 'blur(8px)' },
+            {
+              opacity: 0.6, x: 0, scale: 1, filter: 'blur(0px)',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        }
       });
     }, section);
 
-    // Interactive spotlight
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = section.getBoundingClientRect();
-      gsap.to(spotlightRef.current, {
-        x: e.clientX,
-        y: e.clientY - rect.top,
-        duration: 0.8,
-        ease: 'power2.out'
-      });
-    };
-    section.addEventListener('mousemove', handleMouseMove);
+    // Interactive spotlight (desktop only)
+    let handleMouseMove: (e: MouseEvent) => void;
+    if (!isMobile && spotlightRef.current) {
+      handleMouseMove = (e: MouseEvent) => {
+        const rect = section.getBoundingClientRect();
+        gsap.to(spotlightRef.current, {
+          x: e.clientX,
+          y: e.clientY - rect.top,
+          duration: 0.8,
+          ease: 'power2.out'
+        });
+      };
+      section.addEventListener('mousemove', handleMouseMove);
+    }
 
     return () => {
-      section.removeEventListener('mousemove', handleMouseMove);
+      if (!isMobile && handleMouseMove) {
+        section.removeEventListener('mousemove', handleMouseMove);
+      }
       ctx.revert();
     };
   }, []);
@@ -179,7 +230,7 @@ export default function PhilosophySection() {
       {/* Interactive Spotlight */}
       <div
         ref={spotlightRef}
-        className="absolute top-0 left-0 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 z-[3] pointer-events-none opacity-15 blur-[80px]"
+        className="absolute top-0 left-0 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 z-[3] pointer-events-none opacity-15 blur-[80px] hidden lg:block"
         style={{ background: 'radial-gradient(circle, rgba(242, 204, 143, 0.4) 0%, transparent 70%)' }}
       />
 

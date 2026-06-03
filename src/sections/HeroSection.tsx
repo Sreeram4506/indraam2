@@ -200,13 +200,15 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
           </div>
 
           {/* Right: Visual showcase - Flowing Node Graph */}
-          <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
-            <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
-              <Suspense fallback={<div className="w-full h-full" />}>
-                <FlowingNodeGraph />
-              </Suspense>
+          {!isMobile && (
+            <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
+              <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
+                <Suspense fallback={<div className="w-full h-full" />}>
+                  <FlowingNodeGraph />
+                </Suspense>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

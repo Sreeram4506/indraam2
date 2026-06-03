@@ -32,6 +32,10 @@ export default function WorkSection() {
     const section = sectionRef.current;
     if (!section) return;
 
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches || 
+                     ('ontouchstart' in window) || 
+                     (navigator.maxTouchPoints > 0);
+
     const ctx = gsap.context(() => {
       // Header animations — Cinematic kinetic reveal
       if (headerRef.current) {
@@ -67,43 +71,45 @@ export default function WorkSection() {
         }
       }
 
-      // SECTION PROGRESS BAR
-      gsap.to('.portfolio-progress-bar', {
-        scaleY: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true
-        }
-      });
+      // SECTION PROGRESS BAR (Desktop only)
+      if (!isMobile) {
+        gsap.to('.portfolio-progress-bar', {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: true
+          }
+        });
 
-      // BACKGROUND SCROLL TEXT PARALLAX
-      gsap.to('.portfolio-bg-text', {
-        xPercent: -50,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true
-        }
-      });
+        // BACKGROUND SCROLL TEXT PARALLAX
+        gsap.to('.portfolio-bg-text', {
+          xPercent: -50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
 
-      // BACKGROUND ACCENT PARALLAX
-      gsap.to(backgroundAccentRef.current, {
-        yPercent: 30,
-        xPercent: -20,
-        rotate: 15,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true
-        }
-      });
+        // BACKGROUND ACCENT PARALLAX
+        gsap.to(backgroundAccentRef.current, {
+          yPercent: 30,
+          xPercent: -20,
+          rotate: 15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+      }
 
       // PROJECT ITEMS
       projectRefs.current.forEach((el, i) => {
@@ -117,46 +123,78 @@ export default function WorkSection() {
 
         if (!videoContainer || !media || !content || !num || !button) return;
 
-        // 0. Pin the project in the center so the user can watch the video and read info
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'center center',
-          end: '+=100%', // Pins for one viewport height
-          pin: true,
-          pinSpacing: true,
-        });
-
-        // 1. 3D Tilt reveal for video container - NOW SCRUBBED
-        gsap.fromTo(videoContainer,
-          { 
-            clipPath: 'inset(0 100% 0 0)', 
-            rotateY: 25, 
-            scale: 0.9, 
-            opacity: 0, 
-            x: i % 2 === 0 ? -150 : 150 
-          },
-          {
-            clipPath: 'inset(0 0% 0 0)',
-            rotateY: 0,
-            scale: 1,
-            opacity: 1,
-            x: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top bottom',
-              end: 'center center',
-              scrub: true,
+        if (isMobile) {
+          // Performant fade/slide-up animation for mobile viewports
+          gsap.fromTo([videoContainer, content],
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+              }
             }
-          }
-        );
+          );
+        } else {
+          // 0. Pin the project in the center (Desktop only)
+          ScrollTrigger.create({
+            trigger: el,
+            start: 'center center',
+            end: '+=100%', // Pins for one viewport height
+            pin: true,
+            pinSpacing: true,
+          });
 
-        // 2. Continuous Parallax for media inside
-        gsap.fromTo(media,
-          { yPercent: -15, scale: 1.2 },
-          {
-            yPercent: 15,
-            scale: 1,
+          // 1. 3D Tilt reveal for video container - SCRUBBED
+          gsap.fromTo(videoContainer,
+            { 
+              clipPath: 'inset(0 100% 0 0)', 
+              rotateY: 25, 
+              scale: 0.9, 
+              opacity: 0, 
+              x: i % 2 === 0 ? -150 : 150 
+            },
+            {
+              clipPath: 'inset(0 0% 0 0)',
+              rotateY: 0,
+              scale: 1,
+              opacity: 1,
+              x: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom',
+                end: 'center center',
+                scrub: true,
+              }
+            }
+          );
+
+          // 2. Continuous Parallax for media inside
+          gsap.fromTo(media,
+            { yPercent: -15, scale: 1.2 },
+            {
+              yPercent: 15,
+              scale: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+
+          // 3. Floating number parallax
+          gsap.to(num, {
+            y: -250,
+            rotate: i % 2 === 0 ? 5 : -5,
             ease: 'none',
             scrollTrigger: {
               trigger: el,
@@ -164,126 +202,113 @@ export default function WorkSection() {
               end: 'bottom top',
               scrub: true
             }
-          }
-        );
+          });
 
-        // 3. Floating number parallax - Intensified
-        gsap.to(num, {
-          y: -250,
-          rotate: i % 2 === 0 ? 5 : -5,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true
-          }
-        });
+          // 4. Content entrance with stronger horizontal slide
+          const details = content.querySelectorAll('.detail-reveal');
+          const decorLine = el.querySelector('.project-line');
+          const projectTitle = el.querySelector('.project-title');
 
-        // 4. Content entrance with stronger horizontal slide - NOW SCRUBBED
-        const details = content.querySelectorAll('.detail-reveal');
-        const decorLine = el.querySelector('.project-line');
-        const projectTitle = el.querySelector('.project-title');
-
-        gsap.fromTo(content,
-          { opacity: 0, x: i % 2 === 0 ? 150 : -150, skewX: i % 2 === 0 ? 10 : -10 },
-          {
-            opacity: 1,
-            x: 0,
-            skewX: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top bottom+=100',
-              end: 'center center',
-              scrub: true,
+          gsap.fromTo(content,
+            { opacity: 0, x: i % 2 === 0 ? 150 : -150, skewX: i % 2 === 0 ? 10 : -10 },
+            {
+              opacity: 1,
+              x: 0,
+              skewX: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom+=100',
+                end: 'center center',
+                scrub: true,
+              }
             }
-          }
-        );
+          );
 
-        // Staggered details & line drawing coming from the sides - NOW SCRUBBED
-        gsap.fromTo(decorLine,
-          { scaleX: 0, x: i % 2 === 0 ? 50 : -50 },
-          {
-            scaleX: 1,
-            x: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top bottom+=200',
-              end: 'center center',
-              scrub: true,
+          // Staggered details & line drawing coming from the sides
+          gsap.fromTo(decorLine,
+            { scaleX: 0, x: i % 2 === 0 ? 50 : -50 },
+            {
+              scaleX: 1,
+              x: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom+=200',
+                end: 'center center',
+                scrub: true,
+              }
             }
-          }
-        );
+          );
 
-        gsap.fromTo(details,
-          { 
-            opacity: 0, 
-            x: i % 2 === 0 ? 60 : -60, 
-            skewX: i % 2 === 0 ? 10 : -10 
-          },
-          {
-            opacity: 1, x: 0, skewX: 0,
-            stagger: 0.1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top bottom+=300',
-              end: 'center center',
-              scrub: true,
+          gsap.fromTo(details,
+            { 
+              opacity: 0, 
+              x: i % 2 === 0 ? 60 : -60, 
+              skewX: i % 2 === 0 ? 10 : -10 
+            },
+            {
+              opacity: 1, x: 0, skewX: 0,
+              stagger: 0.1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom+=300',
+                end: 'center center',
+                scrub: true,
+              }
             }
-          }
-        );
+          );
 
-        // Subtle Title Magnetic interaction on the whole row
-        let titleXTo: any, titleYTo: any, titleRotTo: any;
-        if (projectTitle) {
-          titleXTo = gsap.quickTo(projectTitle, 'x', { duration: 1, ease: 'power2.out' });
-          titleYTo = gsap.quickTo(projectTitle, 'y', { duration: 1, ease: 'power2.out' });
-          titleRotTo = gsap.quickTo(projectTitle, 'rotate', { duration: 1, ease: 'power2.out' });
+          // Subtle Title Magnetic interaction on the whole row
+          let titleXTo: any, titleYTo: any, titleRotTo: any;
+          if (projectTitle) {
+            titleXTo = gsap.quickTo(projectTitle, 'x', { duration: 1, ease: 'power2.out' });
+            titleYTo = gsap.quickTo(projectTitle, 'y', { duration: 1, ease: 'power2.out' });
+            titleRotTo = gsap.quickTo(projectTitle, 'rotate', { duration: 1, ease: 'power2.out' });
+          }
+
+          const handleTitleMove = (e: MouseEvent) => {
+             if (!projectTitle || !titleXTo) return;
+             const rect = el.getBoundingClientRect();
+             const relX = (e.clientX - rect.left) / rect.width - 0.5;
+             const relY = (e.clientY - rect.top) / rect.height - 0.5;
+             
+             titleXTo(relX * 30);
+             titleYTo(relY * 20);
+             titleRotTo(relX * 2);
+          };
+          el.addEventListener('mousemove', handleTitleMove);
+          el.addEventListener('mouseleave', () => {
+             gsap.to(projectTitle, { x: 0, y: 0, rotate: 0, duration: 1.5, ease: 'elastic.out(1, 0.3)' });
+          });
+
+          // 5. Magnetic Button Effect (Simulated via mouse move on the parent row)
+          let btnXTo: any, btnYTo: any;
+          if (button) {
+            btnXTo = gsap.quickTo(button, 'x', { duration: 0.6, ease: 'power2.out' });
+            btnYTo = gsap.quickTo(button, 'y', { duration: 0.6, ease: 'power2.out' });
+          }
+
+          const handleMouseMove = (e: MouseEvent) => {
+            if (!button || !btnXTo) return;
+            const rect = button.getBoundingClientRect();
+            const btnX = rect.left + rect.width / 2;
+            const btnY = rect.top + rect.height / 2;
+            
+            const dx = e.clientX - btnX;
+            const dy = e.clientY - btnY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            
+            if (dist < 150) {
+              btnXTo(dx * 0.3);
+              btnYTo(dy * 0.3);
+            } else {
+              gsap.to(button, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.3)', overwrite: 'auto' });
+            }
+          };
+          el.addEventListener('mousemove', handleMouseMove);
         }
-
-        const handleTitleMove = (e: MouseEvent) => {
-           if (!projectTitle || !titleXTo) return;
-           const rect = el.getBoundingClientRect();
-           const relX = (e.clientX - rect.left) / rect.width - 0.5;
-           const relY = (e.clientY - rect.top) / rect.height - 0.5;
-           
-           titleXTo(relX * 30);
-           titleYTo(relY * 20);
-           titleRotTo(relX * 2);
-        };
-        el.addEventListener('mousemove', handleTitleMove);
-        el.addEventListener('mouseleave', () => {
-           gsap.to(projectTitle, { x: 0, y: 0, rotate: 0, duration: 1.5, ease: 'elastic.out(1, 0.3)' });
-        });
-
-        // 5. Magnetic Button Effect (Simulated via mouse move on the parent row)
-        let btnXTo: any, btnYTo: any;
-        if (button) {
-          btnXTo = gsap.quickTo(button, 'x', { duration: 0.6, ease: 'power2.out' });
-          btnYTo = gsap.quickTo(button, 'y', { duration: 0.6, ease: 'power2.out' });
-        }
-
-        const handleMouseMove = (e: MouseEvent) => {
-          if (!button || !btnXTo) return;
-          const rect = button.getBoundingClientRect();
-          const btnX = rect.left + rect.width / 2;
-          const btnY = rect.top + rect.height / 2;
-          
-          const dx = e.clientX - btnX;
-          const dy = e.clientY - btnY;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          
-          if (dist < 150) {
-            btnXTo(dx * 0.3);
-            btnYTo(dy * 0.3);
-          } else {
-            gsap.to(button, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.3)', overwrite: 'auto' });
-          }
-        };
-        el.addEventListener('mousemove', handleMouseMove);
       });
 
     }, section);
