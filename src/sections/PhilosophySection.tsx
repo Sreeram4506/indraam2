@@ -262,7 +262,7 @@ export default function PhilosophySection() {
             <div
               key={p.num}
               ref={(el) => { principlesRef.current[i] = el; }}
-              className="group relative border border-white/5 p-8 lg:p-10 hover:border-saffron/30 transition-all duration-700 bg-white/[0.01] backdrop-blur-sm overflow-hidden"
+              className="group relative border border-white/5 p-8 lg:p-10 hover:border-saffron/30 transition-all duration-700 bg-white/[0.01] lg:backdrop-blur-sm overflow-hidden"
             >
               {/* Hover fill effect */}
               <div className="absolute inset-0 bg-saffron/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-out" />

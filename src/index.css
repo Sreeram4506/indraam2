@@ -121,9 +121,39 @@
     z-index: 9999;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1023px) {
     .noise-overlay {
-      opacity: 0.015;
+      display: none !important;
+    }
+
+    /* Kill ALL expensive backdrop-blur and box-shadow on mobile/tablet */
+    .backdrop-blur-sm,
+    .backdrop-blur-md,
+    .backdrop-blur-lg,
+    .backdrop-blur-xl,
+    .backdrop-blur-2xl,
+    [class*="backdrop-blur"] {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+
+    /* Reduce massive blur radii on gradient orbs */
+    [class*="blur-[1"] {
+      filter: none !important;
+      -webkit-filter: none !important;
+      opacity: 0.15 !important;
+      background-size: 150% 150% !important;
+    }
+
+    /* GPU-promote scrolling containers */
+    main {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Disable hover-only animations */
+    .group:hover .group-hover\:translate-y-0,
+    .group:hover .group-hover\:translate-x-0 {
+      transition-duration: 0ms !important;
     }
   }
 
@@ -139,12 +169,25 @@
       linear-gradient(to bottom, rgba(244, 241, 222, 0.02) 1px, transparent 1px);
   }
 
+  @media (max-width: 1023px) {
+    .bg-grid {
+      display: none !important;
+    }
+  }
+
   /* Glassmorphism */
   .glass-card {
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  @media (max-width: 1023px) {
+    .glass-card {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
   }
 
   /* Perspective */
@@ -232,6 +275,16 @@
     animation: shimmer 3s ease-in-out infinite;
   }
 
+  /* Reduce motion for accessibility and performance */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Transition timing */
   .ease-expo {
     transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
@@ -277,5 +330,36 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(242, 204, 143, 0.3);
+  }
+
+  /* Page loader */
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--obsidian);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  .page-loader.loaded {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(242, 204, 143, 0.15);
+    border-top-color: var(--saffron);
+    border-radius: 50%;
+    animation: loader-spin 0.8s linear infinite;
+  }
+
+  @keyframes loader-spin {
+    to { transform: rotate(360deg); }
   }
 }

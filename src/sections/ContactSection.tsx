@@ -65,7 +65,7 @@ export default function ContactSection() {
       style={{ zIndex: 2 }}
     >
       {/* Background accents */}
-      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-saffron/3 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-saffron/3 rounded-full blur-[150px] pointer-events-none hidden lg:block" />
 
       <div className="px-6 md:px-20 max-w-7xl mx-auto relative z-10">
         {/* Section label */}

@@ -118,11 +118,11 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
       style={{ zIndex: 1 }}
     >
       {/* Ambient background grid */}
-      <div className="absolute inset-0 bg-grid opacity-40" />
+      <div className="absolute inset-0 bg-grid opacity-40 hidden lg:block" />
 
       {/* Gradient orbs */}
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-saffron/8 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-terracotta/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-saffron/8 rounded-full blur-[120px] pointer-events-none hidden lg:block" />
+      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-terracotta/5 rounded-full blur-[100px] pointer-events-none hidden lg:block" />
 
       <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-screen py-32">

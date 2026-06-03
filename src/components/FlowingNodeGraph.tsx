@@ -125,7 +125,7 @@ export default function FlowingNodeGraph() {
   return (
     <div ref={containerRef} className="w-full aspect-square relative max-w-[550px] mx-auto group/graph">
       {/* Decorative background depth */}
-      <div className="absolute inset-0 bg-saffron/2 rounded-full blur-[80px] group-hover/graph:bg-saffron/5 transition-colors duration-1000" />
+      <div className="absolute inset-0 bg-saffron/2 rounded-full blur-[80px] group-hover/graph:bg-saffron/5 transition-colors duration-1000 hidden lg:block" />
       
       <svg
         ref={svgRef}
@@ -134,10 +134,12 @@ export default function FlowingNodeGraph() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
+          {!isMobile && (
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          )}
           
           <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
             <stop offset="0%" stopColor="rgba(242, 204, 143, 0.15)" />
@@ -171,7 +173,7 @@ export default function FlowingNodeGraph() {
                   fill="none"
                   opacity="0.8"
                   strokeLinecap="round"
-                  filter="url(#glow)"
+                  filter={isMobile ? undefined : "url(#glow)"}
                 />
               )}
             </g>

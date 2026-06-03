@@ -326,7 +326,7 @@ export default function WorkSection() {
       {/* Cinematic Background Elements */}
       <div 
         ref={backgroundAccentRef}
-        className="absolute top-1/4 -right-1/4 w-[80vw] h-[80vw] bg-saffron/5 rounded-full blur-[150px] pointer-events-none z-0"
+        className="absolute top-1/4 -right-1/4 w-[80vw] h-[80vw] bg-saffron/5 rounded-full blur-[150px] pointer-events-none z-0 hidden lg:block"
       />
       <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent" />
@@ -359,7 +359,7 @@ export default function WorkSection() {
             <div
               key={project.num}
               ref={(el) => { projectRefs.current[i] = el; }}
-              className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-10 md:gap-32 items-center bg-white/[0.02] backdrop-blur-sm border border-white/5 rounded-2xl p-6 md:bg-transparent md:backdrop-blur-none md:border-none md:p-0 md:rounded-none`}
+              className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-10 md:gap-32 items-center bg-white/[0.02] border border-white/5 rounded-2xl p-6 md:bg-transparent md:border-none md:p-0 md:rounded-none`}
             >
               {/* Video Wrap with 3D Container */}
               <div className="video-container relative w-full md:w-[65%] aspect-[16/9] overflow-hidden group perspective-1000 will-change-transform">

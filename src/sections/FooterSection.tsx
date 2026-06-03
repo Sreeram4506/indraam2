@@ -22,16 +22,23 @@ export default function FooterSection() {
     });
     tween1.totalTime(1500);
 
-    const st = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top bottom',
-      end: 'bottom bottom',
-      scrub: true,
-      onUpdate: (self) => {
-        const dir = self.direction === 1 ? 1 : -1;
-        gsap.to(tween1, { timeScale: dir, duration: 0.5, overwrite: true });
-      },
-    });
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches || 
+                     ('ontouchstart' in window) || 
+                     (navigator.maxTouchPoints > 0);
+
+    let st: any = null;
+    if (!isMobile) {
+      st = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top bottom',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: (self) => {
+          const dir = self.direction === 1 ? 1 : -1;
+          gsap.to(tween1, { timeScale: dir, duration: 0.5, overwrite: true });
+        },
+      });
+    }
 
     // Fade in modules
     gsap.fromTo(
@@ -60,7 +67,7 @@ export default function FooterSection() {
 
     return () => {
       clearInterval(clockInterval);
-      st.kill();
+      if (st) st.kill();
     };
   }, []);
 
@@ -156,7 +163,7 @@ export default function FooterSection() {
 
         {/* Footer Logo */}
         <div className="footer-mod relative py-20 md:py-28 px-6 flex flex-col items-center justify-center text-center group/logo overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-saffron/5 blur-[100px] rounded-full pointer-events-none opacity-30 group-hover/logo:opacity-60 transition-all duration-1000 z-0" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-saffron/5 blur-[100px] rounded-full pointer-events-none opacity-30 group-hover/logo:opacity-60 transition-all duration-1000 z-0 hidden lg:block" />
 
           <div className="w-full relative cursor-pointer z-10" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <h1 className="font-display text-[10vw] leading-none tracking-tighter uppercase select-none text-parchment transition-transform duration-700 group-hover/logo:scale-[1.02]">

@@ -206,7 +206,7 @@ export default function ServicesSection() {
             <div className="lg:sticky lg:top-32">
               <div
                 ref={detailRef}
-                className="relative border border-white/5 bg-white/[0.01] backdrop-blur-sm p-10 lg:p-14 overflow-hidden"
+                className="relative border border-white/5 bg-white/[0.01] lg:backdrop-blur-sm p-10 lg:p-14 overflow-hidden"
               >
                 {/* Background number */}
                 <div className="absolute top-0 right-0 font-display text-[200px] leading-none text-white/[0.02] pointer-events-none select-none -mt-8 -mr-4">

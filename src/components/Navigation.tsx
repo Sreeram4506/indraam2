@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLocation, useNavigate } from 'react-router';
@@ -29,44 +29,62 @@ export default function Navigation({ visible }: NavigationProps) {
     });
   }, [visible]);
 
-  // Logo shrink on scroll
+  // Throttled scroll handler
   useEffect(() => {
-    if (!logoRef.current) return;
-
-    const st = ScrollTrigger.create({
-      trigger: 'body',
-      start: 'top top',
-      end: '300px top',
-      onUpdate: (self) => {
-        const p = self.progress;
-        setScrolled(p > 0.1);
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        setScrolled(scrollY > 50);
         if (logoRef.current) {
-          const scale = 1 - p * 0.15;
+          const scale = Math.max(0.85, 1 - (scrollY / 300) * 0.15);
           logoRef.current.style.transform = `scale(${scale})`;
         }
-      },
-    });
-
-    return () => st.kill();
-  }, []);
-
-  // Track active section
-  useEffect(() => {
-    const sectionIds = ['hero', 'philosophy', 'services', 'work', 'contact'];
-    const observers = sectionIds.map((id) => {
-      return ScrollTrigger.create({
-        trigger: `#${id}`,
-        start: 'top center',
-        end: 'bottom center',
-        onEnter: () => setActiveSection(id),
-        onEnterBack: () => setActiveSection(id),
+        ticking = false;
       });
-    });
+    };
 
-    return () => { observers.forEach((o) => o.kill()); };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollTo = (id: string) => {
+  // Track active section using native IntersectionObserver (Desktop only)
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches || 
+                     ('ontouchstart' in window) || 
+                     (navigator.maxTouchPoints > 0);
+    if (isMobile) return;
+
+    const sectionIds = ['hero', 'philosophy', 'services', 'work', 'contact'];
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const scrollTo = useCallback((id: string) => {
     setMenuOpen(false);
     if (location.pathname !== '/') {
       navigate('/#' + id);
@@ -76,7 +94,17 @@ export default function Navigation({ visible }: NavigationProps) {
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, [location.pathname, navigate]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   const navItems = [
     { label: 'Philosophy', id: 'philosophy' },
@@ -172,8 +200,8 @@ export default function Navigation({ visible }: NavigationProps) {
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden fixed inset-0 bg-obsidian/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-2 transition-all duration-700 ${
+      {/* Mobile Menu — no backdrop-blur, solid bg for performance */}
+      <div className={`md:hidden fixed inset-0 bg-obsidian flex flex-col items-center justify-center gap-2 transition-all duration-500 ${
         menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}>
         {navItems.map((item, i) => (
