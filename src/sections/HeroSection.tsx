@@ -76,7 +76,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
 
   // Parallax scroll effect
   useEffect(() => {
-    if (!entranceComplete || !sectionRef.current) return;
+    if (!entranceComplete || !sectionRef.current || isMobile) return;
 
     const st = ScrollTrigger.create({
       trigger: sectionRef.current,
@@ -106,7 +106,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
     });
 
     return () => st.kill();
-  }, [entranceComplete]);
+  }, [entranceComplete, isMobile]);
 
   if (!entranceComplete) return (
     <section id="hero" className="relative min-h-screen bg-obsidian" style={{ zIndex: 1 }} />

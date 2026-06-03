@@ -16,17 +16,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const wordsRef = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
-    // Simulate loading progress
-    const progressInterval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return Math.min(p + Math.random() * 16 + 8, 100);
-      });
-    }, 120);
-
     // Master timeline
     const tl = gsap.timeline({
       onComplete: () => {
@@ -42,9 +31,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
         exitTl
           .to(textRef.current, {
-            scale: 1.5,
+            scale: 1.3,
             opacity: 0,
-            filter: 'blur(20px)',
+            filter: 'blur(15px)',
             duration: 0.6,
             ease: 'power3.in',
           })
@@ -79,29 +68,39 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         rotateX: -90,
         opacity: 0,
       },
-        {
-          y: 0,
-          rotateX: 0,
-          opacity: 1,
-          duration: 0.85,
-          stagger: 0.05,
-          ease: 'expo.out',
-        },
+      {
+        y: 0,
+        rotateX: 0,
+        opacity: 1,
+        duration: 0.95,
+        stagger: 0.06,
+        ease: 'expo.out',
+      },
       0.2
     );
+
+    // Sync progress value animation with the timeline (lasting 2.2 seconds)
+    const progressObj = { value: 0 };
+    tl.to(progressObj, {
+      value: 100,
+      duration: 2.2,
+      ease: 'power2.out',
+      onUpdate: () => {
+        setProgress(Math.round(progressObj.value));
+      }
+    }, 0.35);
 
     // Progress line animation
     tl.fromTo(lineRef.current,
       { scaleX: 0 },
-      { scaleX: 1, duration: 1.2, ease: 'power1.inOut' },
+      { scaleX: 1, duration: 2.2, ease: 'power2.out' },
       0.35
     );
 
-    // Hold
-    tl.to({}, { duration: 0.15 });
+    // Hold at 100% for a premium cinematic pause
+    tl.to({}, { duration: 0.5 });
 
     return () => {
-      clearInterval(progressInterval);
       tl.kill();
     };
   }, [onComplete]);
