@@ -108,15 +108,13 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
     return () => st.kill();
   }, [entranceComplete, isMobile]);
 
-  if (!entranceComplete) return (
-    <section id="hero" className="relative min-h-screen bg-obsidian" style={{ zIndex: 1 }} />
-  );
-
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden select-none bg-obsidian text-parchment"
+      className={`relative min-h-screen flex flex-col justify-center overflow-hidden select-none bg-obsidian text-parchment transition-all duration-500 ${
+        entranceComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
       style={{ zIndex: 1 }}
     >
       {/* Ambient background grid */}
@@ -200,15 +198,13 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
           </div>
 
           {/* Right: Visual showcase - Flowing Node Graph */}
-          {!isMobile && (
-            <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
-              <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
-                <Suspense fallback={<div className="w-full h-full" />}>
-                  <FlowingNodeGraph />
-                </Suspense>
-              </div>
+          <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
+            <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
+              <Suspense fallback={<div className="w-full h-full" />} >
+                <FlowingNodeGraph />
+              </Suspense>
             </div>
-          )}
+          </div>
         </div>
       </div>
 

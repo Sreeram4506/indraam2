@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import gsap from 'gsap';
 import { expertise } from '../data/expertise';
 import { 
@@ -14,6 +14,20 @@ import {
 export default function FlowingNodeGraph() {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth < 1024 || 
+        ('ontouchstart' in window) || 
+        (navigator.maxTouchPoints > 0)
+      );
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Map expertise to icons
   const iconMap: Record<string, any> = {
@@ -68,30 +82,32 @@ export default function FlowingNodeGraph() {
         });
       }
 
-      // Dynamic Pulse animation for links (Data flow)
-      const particles = svgRef.current?.querySelectorAll('.flow-particle');
-      if (particles?.length) {
-        particles.forEach((particle, i) => {
-          const path = particle as SVGPathElement;
-          const length = path.getTotalLength();
-          
-          // Ensure path properties are reset before animating
-          gsap.killTweensOf(path);
-          
-          const pulseLength = 20; // Consistent pulse length for better visibility
-          gsap.set(path, { 
-            strokeDasharray: `${pulseLength}, ${length}`,
-            strokeDashoffset: length 
+      // Dynamic Pulse animation for links (Data flow) - Desktop only
+      if (!isMobile) {
+        const particles = svgRef.current?.querySelectorAll('.flow-particle');
+        if (particles?.length) {
+          particles.forEach((particle, i) => {
+            const path = particle as SVGPathElement;
+            const length = path.getTotalLength();
+            
+            // Ensure path properties are reset before animating
+            gsap.killTweensOf(path);
+            
+            const pulseLength = 20; // Consistent pulse length for better visibility
+            gsap.set(path, { 
+              strokeDasharray: `${pulseLength}, ${length}`,
+              strokeDashoffset: length 
+            });
+            
+            gsap.to(path, {
+              strokeDashoffset: -length,
+              duration: 2.5,
+              repeat: -1,
+              ease: 'none',
+              delay: i * 0.5 // Staggered start
+            });
           });
-          
-          gsap.to(path, {
-            strokeDashoffset: -length,
-            duration: 2.5,
-            repeat: -1,
-            ease: 'none',
-            delay: i * 0.5 // Staggered start
-          });
-        });
+        }
       }
 
       // Background rings subtle rotation
@@ -104,7 +120,7 @@ export default function FlowingNodeGraph() {
     }, svgRef);
 
     return () => ctx.revert();
-  }, [nodes]);
+  }, [nodes, isMobile]);
 
   return (
     <div ref={containerRef} className="w-full aspect-square relative max-w-[550px] mx-auto group/graph">
@@ -145,17 +161,19 @@ export default function FlowingNodeGraph() {
                 strokeWidth="1"
               />
               
-              {/* Animated pulse */}
-              <path
-                className="flow-particle"
-                d={`M ${centerNode.x} ${centerNode.y} L ${node.x} ${node.y}`}
-                stroke="var(--saffron)"
-                strokeWidth="2"
-                fill="none"
-                opacity="0.8"
-                strokeLinecap="round"
-                filter="url(#glow)"
-              />
+              {/* Animated pulse - Desktop only */}
+              {!isMobile && (
+                <path
+                  className="flow-particle"
+                  d={`M ${centerNode.x} ${centerNode.y} L ${node.x} ${node.y}`}
+                  stroke="var(--saffron)"
+                  strokeWidth="2"
+                  fill="none"
+                  opacity="0.8"
+                  strokeLinecap="round"
+                  filter="url(#glow)"
+                />
+              )}
             </g>
           ))}
         </g>
