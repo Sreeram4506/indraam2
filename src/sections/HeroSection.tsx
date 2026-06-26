@@ -115,7 +115,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
       className={`relative min-h-screen flex flex-col justify-center overflow-hidden select-none bg-obsidian text-parchment transition-all duration-500 ${
         entranceComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
-      style={{ zIndex: 1 }}
+      style={{ zIndex: 10 }}
     >
       {/* Ambient background grid */}
       <div className="absolute inset-0 bg-grid opacity-40 hidden lg:block" />
@@ -140,9 +140,17 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             {/* Tagline */}
             <div ref={taglineRef} className="mb-8 perspective-1000 overflow-hidden">
               {isMobile && (
-                <h1 className="font-display text-[clamp(36px,10vw,48px)] leading-[0.9] tracking-tight mb-4">
+                <h1 className="font-display text-[clamp(44px,12vw,58px)] leading-[0.86] tracking-tight mb-4">
                   <span className="word inline-block">INDRAAM</span>{' '}
-                  <span className="word inline-block text-transparent" style={{ WebkitTextStroke: '1px rgba(244, 241, 222, 0.5)' }}>STUDIO</span>
+                  <span
+                    className="word inline-block"
+                    style={{
+                      color: 'rgba(244, 241, 222, 0.92)',
+                      WebkitTextStroke: '1.5px rgba(242, 204, 143, 0.55)',
+                    }}
+                  >
+                    STUDIO
+                  </span>
                 </h1>
               )}
               <h2 className="font-display text-[clamp(28px,4vw,52px)] leading-[1.05] tracking-tight">

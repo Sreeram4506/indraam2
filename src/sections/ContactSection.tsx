@@ -62,7 +62,7 @@ export default function ContactSection() {
       id="contact"
       ref={sectionRef}
       className="relative bg-obsidian py-32 lg:py-48 overflow-hidden"
-      style={{ zIndex: 2 }}
+      style={{ zIndex: 10 }}
     >
       {/* Background accents */}
       <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-saffron/3 rounded-full blur-[150px] pointer-events-none hidden lg:block" />

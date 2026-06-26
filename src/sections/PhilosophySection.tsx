@@ -225,7 +225,7 @@ export default function PhilosophySection() {
       id="philosophy"
       ref={sectionRef}
       className="relative bg-obsidian overflow-hidden py-32 lg:py-48"
-      style={{ zIndex: 2 }}
+      style={{ zIndex: 10 }}
     >
       {/* Interactive Spotlight */}
       <div

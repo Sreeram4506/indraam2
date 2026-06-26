@@ -31,7 +31,7 @@ export default function ServicesSection() {
         );
       }
 
-      // List items entrance
+      // List items entrance (desktop)
       if (listRef.current) {
         const items = listRef.current.querySelectorAll('.service-item');
         gsap.fromTo(items,
@@ -40,6 +40,22 @@ export default function ServicesSection() {
             opacity: 1, x: 0,
             duration: 0.8, stagger: 0.06, ease: 'power3.out',
             scrollTrigger: { trigger: listRef.current, start: 'top 75%' }
+          }
+        );
+      }
+
+      // Mobile mosaic entrance
+      const mosaic = section.querySelector('.service-mosaic');
+      if (mosaic) {
+        const cards = mosaic.querySelectorAll('.service-mosaic-card');
+        gsap.fromTo(cards,
+          { opacity: 0, y: 18, rotateX: 25 },
+          {
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.8,
+            stagger: 0.06,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: mosaic, start: 'top 80%' }
           }
         );
       }
@@ -104,100 +120,103 @@ export default function ServicesSection() {
           {/* Left: Service List */}
           <div ref={listRef} className="lg:col-span-5">
             <div className="space-y-0">
-              {services.map((service, i) => (
-                <div key={service.num} className="flex flex-col border-b border-white/5">
-                  <div
-                    className={`service-item group flex items-center gap-6 py-5 cursor-pointer transition-all duration-500 ${
-                      activeService === i
-                        ? 'lg:border-saffron/30'
-                        : 'hover:border-white/15'
-                    }`}
-                    onMouseEnter={() => window.innerWidth >= 1024 && setActiveService(i)}
-                    onClick={() => {
-                      if (window.innerWidth >= 1024) {
-                        setSelectedService(service.title);
-                      } else {
-                        setActiveService(activeService === i ? -1 : i);
-                      }
-                    }}
-                  >
-                    <span className={`font-mono text-[10px] tracking-[0.2em] transition-colors duration-300 ${
-                      activeService === i ? 'text-saffron' : 'text-fog/30'
-                    }`}>
-                      {service.num}
-                    </span>
-
-                    <div className="flex-1">
-                      <h3 className={`font-display text-xl lg:text-2xl transition-all duration-500 ${
+              {/* Desktop: list + active indicator + accordion behavior handled by right panel */}
+              <div className="hidden lg:block">
+                {services.map((service, i) => (
+                  <div key={service.num} className="flex flex-col border-b border-white/5">
+                    <div
+                      className={`service-item group flex items-center gap-6 py-5 cursor-pointer transition-all duration-500 ${
                         activeService === i
-                          ? 'text-parchment translate-x-2'
-                          : 'text-fog/40 group-hover:text-fog/70'
-                      }`}>
-                        {service.title}
-                      </h3>
-                    </div>
-
-                    {/* Active indicator */}
-                    <div className={`hidden lg:block w-2 h-2 rounded-full transition-all duration-500 ${
-                      activeService === i
-                        ? 'bg-saffron scale-100'
-                        : 'bg-transparent scale-0'
-                    }`} />
-
-                    {/* Arrow / Plus-Minus for mobile */}
-                    <svg
-                      width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-                      className={`hidden lg:block transition-all duration-500 ${
-                        activeService === i
-                          ? 'text-saffron opacity-100 translate-x-0'
-                          : 'text-fog/20 opacity-0 -translate-x-2'
+                          ? 'lg:border-saffron/30'
+                          : 'hover:border-white/15'
                       }`}
+                      onMouseEnter={() => window.innerWidth >= 1024 && setActiveService(i)}
+                      onClick={() => setSelectedService(service.title)}
                     >
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                    
-                    {/* Mobile toggle icon */}
-                    <div className={`lg:hidden w-6 h-6 flex items-center justify-center transition-transform duration-300 ${activeService === i ? 'rotate-180 text-saffron' : 'text-fog/40'}`}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <polyline points="6 9 12 15 18 9" />
+                      <span className={`font-mono text-[10px] tracking-[0.2em] transition-colors duration-300 ${
+                        activeService === i ? 'text-saffron' : 'text-fog/30'
+                      }`}>
+                        {service.num}
+                      </span>
+
+                      <div className="flex-1">
+                        <h3 className={`font-display text-xl lg:text-2xl transition-all duration-500 ${
+                          activeService === i
+                            ? 'text-parchment translate-x-2'
+                            : 'text-fog/40 group-hover:text-fog/70'
+                        }`}>
+                          {service.title}
+                        </h3>
+                      </div>
+
+                      {/* Active indicator */}
+                      <div className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                        activeService === i
+                          ? 'bg-saffron scale-100'
+                          : 'bg-transparent scale-0'
+                      }`} />
+
+                      <svg
+                        width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                        className={`transition-all duration-500 ${
+                          activeService === i
+                            ? 'text-saffron opacity-100 translate-x-0'
+                            : 'text-fog/20 opacity-0 -translate-x-2'
+                        }`}
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
                       </svg>
                     </div>
                   </div>
+                ))}
+              </div>
 
-                  {/* Mobile Accordion Detail Content */}
-                  <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${activeService === i ? 'max-h-[800px] opacity-100 pb-6' : 'max-h-0 opacity-0'}`}>
-                    <div className="pl-[52px] pr-4 space-y-5">
-                      <div className="flex items-center gap-3">
-                        <span className="text-xl">{service.icon}</span>
-                        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/60">
-                          {service.category}
-                        </span>
+              {/* Mobile: show everything at once (mosaic/grid), no collapsing */}
+              <div className="service-mosaic grid grid-cols-1 gap-4 lg:hidden">
+                {services.map((service) => (
+                  <div
+                    key={service.num}
+                    className="service-mosaic-card group relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.01] px-5 py-5"
+                  >
+                    {/* subtle hover sheen (mobile-safe) */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-saffron/0 via-saffron/10 to-saffron/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    <div className="relative z-10 flex items-start gap-4">
+                      <div className="text-2xl leading-none">{service.icon}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-saffron/70">
+                            {service.num} //
+                          </span>
+                          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-fog/50">
+                            {service.category}
+                          </span>
+                        </div>
+                        <h3 className="font-display text-[clamp(18px,5.2vw,22px)] leading-[1.1] text-parchment mb-2">
+                          {service.title}
+                        </h3>
+                        <p className="font-body text-fog/65 text-sm leading-relaxed">
+                          {service.description}
+                        </p>
+
+                        <div className="mt-4">
+                          <button
+                            onClick={() => setSelectedService(service.title)}
+                            className="group relative inline-flex items-center gap-3 px-5 py-3 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
+                          >
+                            <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                            <span className="relative z-10">Request</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform">
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                              <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
-                      
-                      <p className="font-body text-fog/60 text-sm leading-relaxed">
-                        {service.description}
-                      </p>
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedService(service.title);
-                        }}
-                        className="group relative inline-flex items-center gap-3 px-6 py-3 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
-                      >
-                        <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-                        <span className="relative z-10">Request</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform">
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <polyline points="12 5 19 12 12 19" />
-                        </svg>
-                      </button>
-                      
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
