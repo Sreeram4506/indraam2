@@ -10,6 +10,8 @@ import ContactSection from '../sections/ContactSection';
 import FooterSection from '../sections/FooterSection';
 import CustomCursor from '../components/CustomCursor';
 import Preloader from '../components/Preloader';
+import Seo from '../components/Seo';
+import { homeKeywords } from '../data/seo';
 
 export default function Home() {
   const [preloaderDone, setPreloaderDone] = useState(() => {
@@ -70,6 +72,12 @@ export default function Home() {
 
   return (
     <div className="relative bg-obsidian text-parchment">
+      <Seo
+        title="Indraam Studio | AI Automation, Web Apps, and Digital Products"
+        description="Indraam Studio is a US-based creative and engineering studio building agentic AI systems, automation workflows, web applications, mobile apps, and premium digital products."
+        keywords={homeKeywords}
+        path="/"
+      />
       {/* Preloader */}
       {!preloaderDone && (
         <Preloader onComplete={() => setPreloaderDone(true)} />

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
+import Seo from '../components/Seo';
 import { clearInterests, getInterests, type InterestRecord } from '../lib/interests';
 
 function formatDate(value: string) {
@@ -28,6 +29,14 @@ export default function Admin() {
 
   return (
     <main className="min-h-screen bg-obsidian text-parchment px-6 py-10 md:px-16 md:py-16">
+      <Seo
+        title="Indraam Studio Admin | Interest Dashboard"
+        description="Internal interest dashboard for Indraam Studio."
+        keywords={['Indraam Studio', 'admin dashboard', 'interest dashboard']}
+        path="/admin"
+        noIndex
+      />
+
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
