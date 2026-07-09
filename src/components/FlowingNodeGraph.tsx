@@ -42,9 +42,9 @@ export default function FlowingNodeGraph() {
   // Filter expertise to select 6 key items for the graph
   const nodes = useMemo(() => {
     const selected = [0, 1, 2, 7, 4, 8]; 
+    const radius = isMobile ? 180 : 170;
     return selected.map((idx, i) => {
       const angle = (i / selected.length) * Math.PI * 2;
-      const radius = 170;
       const title = expertise[idx].title;
       return {
         ...expertise[idx],
@@ -54,7 +54,7 @@ export default function FlowingNodeGraph() {
         id: `node-${idx}`
       };
     });
-  }, []);
+  }, [isMobile]);
 
   const centerNode = {
     title: 'YOUR BUSINESS',
@@ -163,8 +163,8 @@ export default function FlowingNodeGraph() {
                 strokeWidth="1"
               />
               
-              {/* Animated pulse - Desktop only */}
-              {!isMobile && (
+              {/* Animated pulse — GSAP on desktop, CSS on mobile */}
+              {!isMobile ? (
                 <path
                   className="flow-particle"
                   d={`M ${centerNode.x} ${centerNode.y} L ${node.x} ${node.y}`}
@@ -173,7 +173,18 @@ export default function FlowingNodeGraph() {
                   fill="none"
                   opacity="0.8"
                   strokeLinecap="round"
-                  filter={isMobile ? undefined : "url(#glow)"}
+                  filter="url(#glow)"
+                />
+              ) : (
+                <line
+                  className="mobile-flow-line"
+                  x1={centerNode.x} y1={centerNode.y}
+                  x2={node.x} y2={node.y}
+                  stroke="var(--saffron)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  opacity="0.7"
+                  style={{ animationDelay: `${i * 0.4}s` }}
                 />
               )}
             </g>
@@ -185,30 +196,32 @@ export default function FlowingNodeGraph() {
           <g key={node.id} id={`node-group-${i}`} className="node-group cursor-pointer group/node">
             {/* Outer ring */}
             <circle
-              cx={node.x} cy={node.y} r="32"
-              className="fill-obsidian stroke-saffron/20 group-hover/node:stroke-saffron/60 transition-all duration-500"
-              strokeWidth="1"
+              cx={node.x} cy={node.y} r={isMobile ? 28 : 32}
+              className="fill-obsidian stroke-saffron/30 group-hover/node:stroke-saffron/60 transition-all duration-500"
+              strokeWidth="1.5"
             />
             
             {/* Inner circle */}
             <circle
-              cx={node.x} cy={node.y} r="26"
-              className="fill-saffron/5 stroke-saffron/10"
+              cx={node.x} cy={node.y} r={isMobile ? 22 : 26}
+              className="fill-saffron/8 stroke-saffron/15"
             />
             
             {/* Icon */}
             <foreignObject x={node.x - 12} y={node.y - 12} width="24" height="24">
               <div className="flex items-center justify-center w-full h-full text-saffron group-hover/node:scale-110 transition-all duration-500">
-                <node.Icon size={18} strokeWidth={1.5} />
+                <node.Icon size={isMobile ? 16 : 18} strokeWidth={1.5} />
               </div>
             </foreignObject>
             
-            {/* Label (Always Visible) */}
+            {/* Label (Always Visible — increased size & contrast for mobile) */}
             <g className="transition-all duration-500">
               <text
-                x={node.x} y={node.y + 45}
+                x={node.x} y={node.y + (isMobile ? 44 : 48)}
+                dx={isMobile ? (node.x < 100 ? 20 : node.x > 400 ? -20 : 0) : 0}
                 textAnchor="middle"
-                className="font-mono text-[7px] fill-parchment/60 group-hover/node:fill-saffron uppercase tracking-[0.2em]"
+                className="font-mono fill-parchment/90 group-hover/node:fill-saffron uppercase tracking-[0.15em]"
+                style={{ fontSize: isMobile ? '12.5px' : '9px' }}
               >
                 {node.title}
               </text>
@@ -239,7 +252,8 @@ export default function FlowingNodeGraph() {
             y={centerNode.y}
             dominantBaseline="middle"
             textAnchor="middle"
-            className="font-mono text-[7px] fill-saffron uppercase tracking-[0.2em] font-bold"
+            className="font-mono fill-saffron uppercase tracking-[0.15em] font-bold"
+            style={{ fontSize: isMobile ? '16px' : '9px' }}
           >
             {centerNode.title.split(' ').map((word, i) => (
               <tspan key={i} x={centerNode.x} dy={i === 0 ? '-0.3em' : '1.2em'}>{word}</tspan>

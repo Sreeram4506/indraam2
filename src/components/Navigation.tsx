@@ -142,10 +142,10 @@ export default function Navigation({ visible }: NavigationProps) {
           ))}
         </div>
 
-        {/* Center Logo */}
+        {/* Center Logo — desktop only (mobile has logo on left) */}
         <button
           onClick={() => scrollTo('hero')}
-          className={`absolute left-1/2 -translate-x-1/2 font-display text-lg tracking-[0.4em] text-parchment hover:text-saffron transition-all duration-1000 pointer-events-auto ${
+          className={`hidden md:block absolute left-1/2 -translate-x-1/2 font-display text-lg tracking-[0.4em] text-parchment hover:text-saffron transition-all duration-1000 pointer-events-auto ${
             scrolled ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'
           }`}
         >
@@ -174,34 +174,40 @@ export default function Navigation({ visible }: NavigationProps) {
           ))}
         </div>
 
-        {/* Mobile Spacer */}
-        <div className="md:hidden flex-1" />
+        {/* Mobile Logo (left side) */}
+        <button
+          onClick={() => scrollTo('hero')}
+          className="md:hidden font-display text-base tracking-[0.3em] text-parchment"
+        >
+          INDRAAM
+        </button>
 
         {/* Mobile menu button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden relative w-7 h-5 flex flex-col justify-between z-[60]"
+          className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] z-[60]"
+          aria-label="Toggle menu"
         >
           <span
-            className={`block w-full h-[1px] bg-parchment transition-all duration-500 origin-left ${
-              menuOpen ? 'rotate-45 translate-x-[1px] w-[28px]' : ''
+            className={`block w-6 h-[1.5px] bg-parchment transition-all duration-500 origin-left ${
+              menuOpen ? 'rotate-45 translate-x-[1px] w-[24px]' : ''
             }`}
           />
           <span
-            className={`block h-[1px] bg-parchment transition-all duration-300 ${
-              menuOpen ? 'opacity-0 w-0' : 'w-3/4'
+            className={`block h-[1.5px] bg-parchment transition-all duration-300 ${
+              menuOpen ? 'opacity-0 w-0' : 'w-4'
             }`}
           />
           <span
-            className={`block w-full h-[1px] bg-parchment transition-all duration-500 origin-left ${
-              menuOpen ? '-rotate-45 translate-x-[1px] w-[28px]' : ''
+            className={`block w-6 h-[1.5px] bg-parchment transition-all duration-500 origin-left ${
+              menuOpen ? '-rotate-45 translate-x-[1px] w-[24px]' : ''
             }`}
           />
         </button>
       </div>
 
       {/* Mobile Menu — no backdrop-blur, solid bg for performance */}
-      <div className={`md:hidden fixed inset-0 bg-obsidian flex flex-col items-center justify-center gap-2 transition-all duration-500 ${
+      <div className={`md:hidden fixed inset-0 bg-obsidian flex flex-col items-center justify-center gap-2 transition-all duration-500 pb-safe ${
         menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}>
         {navItems.map((item, i) => (

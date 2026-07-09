@@ -125,7 +125,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
       <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] bg-terracotta/5 rounded-full blur-[100px] pointer-events-none hidden lg:block" />
 
       <div className="container mx-auto px-6 md:px-12 lg:px-20 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-screen py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-screen py-20 md:py-32">
           {/* Left: Text Content */}
           <div className="lg:col-span-7 flex flex-col justify-center">
             {/* Main headline - Particle text on desktop, styled text on mobile */}
@@ -153,7 +153,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
                   </span>
                 </h1>
               )}
-              <h2 className="font-display text-[clamp(28px,4vw,52px)] leading-[1.05] tracking-tight">
+              <h2 className="font-display text-[clamp(32px,6vw,52px)] leading-[1.05] tracking-tight">
                 <span className="word inline-block">We</span>{' '}
                 <span className="word inline-block">engineer</span>{' '}
                 <span className="word inline-block text-saffron italic">autonomous</span>{' '}
@@ -177,7 +177,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             </p>
 
             {/* CTA */}
-            <div ref={ctaRef} className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
+            <div ref={ctaRef} className="flex flex-col md:flex-row items-stretch md:items-center gap-5 md:gap-4">
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="w-full md:w-auto flex justify-center group relative px-8 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(242,204,143,0.3)]"
@@ -206,8 +206,8 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
           </div>
 
           {/* Right: Visual showcase - Flowing Node Graph */}
-          <div className="lg:col-span-5 relative mt-12 lg:mt-0" ref={visualRef}>
-            <div className="relative w-full aspect-square max-w-[300px] md:max-w-none mx-auto">
+          <div className="lg:col-span-5 relative mt-8 lg:mt-0" ref={visualRef}>
+            <div className="relative w-full aspect-square max-w-[360px] md:max-w-none mx-auto">
               <Suspense fallback={<div className="w-full h-full" />} >
                 <FlowingNodeGraph />
               </Suspense>

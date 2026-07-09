@@ -79,8 +79,8 @@ export default function FooterSection() {
     >
       <div ref={containerRef} className="relative z-10 flex flex-col w-full">
         {/* Top HUD bar */}
-        <div className="flex flex-wrap border-b border-white/5">
-          <div className="footer-mod flex-1 min-w-[200px] p-5 border-r border-white/5 flex justify-between items-center">
+        <div className="flex flex-col md:flex-row flex-wrap border-b border-white/5">
+          <div className="footer-mod flex-1 min-w-[200px] p-5 border-b md:border-b-0 md:border-r border-white/5 flex justify-between items-center">
             <span className="font-mono text-[9px] tracking-widest uppercase text-saffron/60">
               42.3601°N, 71.0589°W
             </span>
@@ -162,11 +162,11 @@ export default function FooterSection() {
         </div>
 
         {/* Footer Logo */}
-        <div className="footer-mod relative py-20 md:py-28 px-6 flex flex-col items-center justify-center text-center group/logo overflow-hidden">
+        <div className="footer-mod relative py-16 md:py-28 px-6 flex flex-col items-center justify-center text-center group/logo overflow-hidden pb-safe">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-saffron/5 blur-[100px] rounded-full pointer-events-none opacity-30 group-hover/logo:opacity-60 transition-all duration-1000 z-0 hidden lg:block" />
 
           <div className="w-full relative cursor-pointer z-10" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <h1 className="font-display text-[10vw] leading-none tracking-tighter uppercase select-none text-parchment transition-transform duration-700 group-hover/logo:scale-[1.02]">
+            <h1 className="font-display text-[12vw] md:text-[10vw] leading-none tracking-tighter uppercase select-none text-parchment transition-transform duration-700 group-hover/logo:scale-[1.02]">
               Indraam{' '}
               <span
                 className="text-transparent transition-colors duration-700 group-hover/logo:text-saffron/20"
@@ -177,7 +177,7 @@ export default function FooterSection() {
             </h1>
           </div>
 
-          <div className="mt-16 flex items-center justify-between w-full max-w-3xl px-4 opacity-30 hover:opacity-100 transition-opacity duration-500 relative z-10">
+          <div className="mt-12 md:mt-16 flex flex-col md:flex-row items-center justify-between gap-6 w-full max-w-3xl px-4 opacity-50 hover:opacity-100 transition-opacity duration-500 relative z-10">
             <div className="flex flex-col items-start">
               <span className="font-mono text-[8px] uppercase tracking-widest text-saffron/60">Status</span>
               <span className="font-mono text-[9px] uppercase text-fog/60">All Systems Nominal</span>

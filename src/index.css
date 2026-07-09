@@ -362,4 +362,28 @@
   @keyframes loader-spin {
     to { transform: rotate(360deg); }
   }
+
+  /* Mobile flowing node graph animation */
+  @keyframes mobile-flow-pulse {
+    0% { stroke-dashoffset: 40; opacity: 0.4; }
+    50% { opacity: 0.9; }
+    100% { stroke-dashoffset: -40; opacity: 0.4; }
+  }
+
+  .mobile-flow-line {
+    stroke-dasharray: 8 32;
+    animation: mobile-flow-pulse 2.5s ease-in-out infinite;
+  }
+
+  /* Touch feedback for interactive elements on mobile */
+  @media (hover: none) and (pointer: coarse) {
+    button, a, [role="button"] {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active, a:active, [role="button"]:active {
+      transform: scale(0.97);
+      transition: transform 0.1s ease;
+    }
+  }
 }

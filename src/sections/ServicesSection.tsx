@@ -177,7 +177,7 @@ export default function ServicesSection() {
                 {services.map((service) => (
                   <div
                     key={service.num}
-                    className="service-mosaic-card group relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.01] px-5 py-5"
+                    className="service-mosaic-card group relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.01] px-6 py-6"
                   >
                     {/* subtle hover sheen (mobile-safe) */}
                     <div className="absolute inset-0 bg-gradient-to-r from-saffron/0 via-saffron/10 to-saffron/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -202,7 +202,7 @@ export default function ServicesSection() {
                         <div className="mt-4">
                           <button
                             onClick={() => setSelectedService(service.title)}
-                            className="group relative inline-flex items-center gap-3 px-5 py-3 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
+                            className="group relative inline-flex items-center gap-3 px-5 py-3 min-h-[44px] border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
                           >
                             <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <span className="relative z-10">Request</span>
@@ -277,7 +277,7 @@ export default function ServicesSection() {
       {selectedService && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-obsidian/95 backdrop-blur-xl">
           <div className="absolute inset-0 cursor-pointer" onClick={() => setSelectedService(null)} />
-          <div className="relative w-full max-w-lg bg-ink border border-white/10 p-8 md:p-12 shadow-2xl">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-ink border border-white/10 p-6 md:p-12 shadow-2xl">
             <button
               onClick={() => setSelectedService(null)}
               className="absolute top-6 right-6 text-fog hover:text-saffron transition-colors"

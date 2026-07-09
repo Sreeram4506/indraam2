@@ -93,7 +93,7 @@ export default function ContactSection() {
         {/* Form + Info Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
           {/* Left: Contact Form */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 order-2 lg:order-1">
             <form
               ref={formRef}
               className="space-y-10"
@@ -143,7 +143,7 @@ export default function ContactSection() {
                   {['Agentic AI', 'Web App', 'Mobile App', 'Computer Vision', 'Data Pipeline', 'Other'].map((tag) => (
                     <label key={tag} className="group cursor-pointer">
                       <input type="checkbox" className="sr-only peer" />
-                      <span className="inline-block px-4 py-2 border border-white/10 font-mono text-[10px] uppercase tracking-widest text-fog/40 peer-checked:border-saffron/50 peer-checked:text-saffron peer-checked:bg-saffron/5 hover:border-white/20 hover:text-fog/60 transition-all duration-300">
+                      <span className="inline-block px-5 py-3 border border-white/10 font-mono text-[10px] uppercase tracking-widest text-fog/40 peer-checked:border-saffron/50 peer-checked:text-saffron peer-checked:bg-saffron/5 hover:border-white/20 hover:text-fog/60 transition-all duration-300">
                         {tag}
                       </span>
                     </label>
@@ -165,7 +165,7 @@ export default function ContactSection() {
               <div className="form-field pt-4">
                 <button
                   type="submit"
-                  className="group relative inline-flex items-center gap-4 px-10 py-5 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_60px_rgba(242,204,143,0.2)]"
+                  className="group relative inline-flex items-center gap-4 px-10 py-5 min-h-[48px] bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_60px_rgba(242,204,143,0.2)]"
                 >
                   <div className="absolute inset-0 bg-parchment translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-600 ease-out" />
                   <span className="relative z-10 font-bold">Send Message</span>
@@ -179,7 +179,7 @@ export default function ContactSection() {
           </div>
 
           {/* Right: Contact Info */}
-          <div ref={infoRef} className="lg:col-span-5">
+          <div ref={infoRef} className="lg:col-span-5 order-1 lg:order-2">
             <div className="lg:sticky lg:top-32 space-y-10">
               {/* Email */}
               <div className="group">
