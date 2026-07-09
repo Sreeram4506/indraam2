@@ -329,20 +329,20 @@ export default function WorkSection() {
         className="absolute top-1/4 -right-1/4 w-[80vw] h-[80vw] bg-saffron/5 rounded-full blur-[150px] pointer-events-none z-0 hidden lg:block"
       />
       <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
-         <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent" />
-         <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-white/10 to-transparent" />
-         <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+         <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-black/20 to-transparent" />
+         <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-black/10 to-transparent" />
+         <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-black/20 to-transparent" />
       </div>
 
       {/* Large Background Scroll Text */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none select-none z-0 opacity-[0.03]">
-        <div className="portfolio-bg-text font-display text-[30vw] text-white whitespace-nowrap leading-none will-change-transform">
+        <div className="portfolio-bg-text font-display text-[30vw] text-parchment whitespace-nowrap leading-none will-change-transform">
           SELECTED PROJECTS SELECTED PROJECTS SELECTED PROJECTS
         </div>
       </div>
 
       {/* Project Progress Indicator */}
-      <div className="absolute left-6 md:left-12 top-0 h-full w-px bg-white/5 z-10 hidden md:block">
+      <div className="absolute left-6 md:left-12 top-0 h-full w-px bg-black/5 z-10 hidden md:block">
         <div className="portfolio-progress-bar sticky top-0 left-0 w-full h-screen bg-saffron/20 origin-top scale-y-0" />
       </div>
 
@@ -359,7 +359,7 @@ export default function WorkSection() {
             <div
               key={project.num}
               ref={(el) => { projectRefs.current[i] = el; }}
-              className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-10 md:gap-32 items-center bg-white/[0.02] border border-white/5 rounded-2xl p-6 md:bg-transparent md:border-none md:p-0 md:rounded-none`}
+              className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-10 md:gap-32 items-center bg-black/[0.02] border border-black/50 rounded-2xl p-6 md:bg-transparent md:border-none md:p-0 md:rounded-none`}
             >
               {/* Video Wrap with 3D Container */}
               <div className="video-container relative w-full md:w-[65%] aspect-[16/9] overflow-hidden group perspective-1000 will-change-transform">
@@ -369,15 +369,15 @@ export default function WorkSection() {
                   style={{ background: project.color }}
                 />
                 
-                <div className="relative w-full h-full overflow-hidden border border-white/5 group-hover:border-white/20 transition-colors duration-700">
+                <div className="relative w-full h-full overflow-hidden border border-black/50 group-hover:border-black/60 transition-colors duration-700">
                   <div className="portfolio-media w-full h-full bg-gradient-to-br from-obsidian via-ink to-obsidian/90 flex flex-col items-center justify-center text-center px-6 will-change-transform">
                     <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-saffron/70 mb-3">Portfolio</span>
                     <span className="font-display text-[clamp(26px,4vw,52px)] leading-none text-parchment">Coming Soon</span>
                   </div>
                   
                   {/* Scanline / Grain Overlay */}
-                  <div className="absolute inset-0 bg-white/[0.03] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                       style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.05) 1px, rgba(255,255,255,0.05) 2px)' }} 
+                  <div className="absolute inset-0 bg-black/[0.03] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                       style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 0, 0,0.05) 1px, rgba(0, 0, 0,0.05) 2px)' }} 
                   />
 
                   {/* Floating Overlay Info */}
@@ -391,7 +391,7 @@ export default function WorkSection() {
 
                 {/* Parallax Project Number */}
                 <div className="project-num absolute -bottom-16 -right-8 z-30 pointer-events-none select-none">
-                   <span className="font-display text-[20vw] text-white/[0.03] leading-none">0{i+1}</span>
+                   <span className="font-display text-[20vw] text-black/[0.03] leading-none">0{i+1}</span>
                 </div>
               </div>
 
@@ -408,20 +408,20 @@ export default function WorkSection() {
                   {project.title}
                 </h3>
                 
-                <p className="detail-reveal font-body text-fog/60 text-xl leading-relaxed mb-16 border-l border-white/5 pl-8">
+                <p className="detail-reveal font-body text-fog/60 text-xl leading-relaxed mb-16 border-l border-black/50 pl-8">
                   {project.description}
                 </p>
                 
                 <button 
                   onClick={() => handleExploreProject(project)}
-                  className="project-button hidden md:flex group relative items-center justify-center w-32 h-32 rounded-full border border-white/10 hover:border-saffron hover:bg-saffron hover:text-obsidian transition-all duration-500 overflow-hidden cursor-pointer"
+                  className="project-button hidden md:flex group relative items-center justify-center w-32 h-32 rounded-full border border-black/50 hover:border-saffron hover:bg-saffron hover:text-parchment transition-all duration-500 overflow-hidden cursor-pointer"
                 >
                    <span className="relative z-10 font-mono text-[9px] uppercase tracking-widest font-bold">Explore</span>
                    <div className="absolute inset-0 bg-saffron scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500" />
                 </button>
                 <button
                   onClick={() => handleExploreProject(project)}
-                  className="md:hidden w-full mt-4 py-4 border border-saffron/30 bg-saffron/5 text-saffron font-mono text-[10px] uppercase tracking-widest text-center"
+                  className="md:hidden w-full mt-4 py-4 border border-saffron/80 bg-saffron/5 text-saffron font-mono text-[10px] uppercase tracking-widest text-center"
                 >
                   Explore Project
                 </button>

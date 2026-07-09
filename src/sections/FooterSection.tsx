@@ -74,13 +74,13 @@ export default function FooterSection() {
   return (
     <footer
       ref={sectionRef}
-      className="relative bg-obsidian text-parchment overflow-hidden border-t border-white/5"
+      className="relative bg-obsidian text-parchment overflow-hidden border-t border-black/50"
       style={{ zIndex: 10 }}
     >
       <div ref={containerRef} className="relative z-10 flex flex-col w-full">
         {/* Top HUD bar */}
-        <div className="flex flex-col md:flex-row flex-wrap border-b border-white/5">
-          <div className="footer-mod flex-1 min-w-[200px] p-5 border-b md:border-b-0 md:border-r border-white/5 flex justify-between items-center">
+        <div className="flex flex-col md:flex-row flex-wrap border-b border-black/50">
+          <div className="footer-mod flex-1 min-w-[200px] p-5 border-b md:border-b-0 md:border-r border-black/50 flex justify-between items-center">
             <span className="font-mono text-[9px] tracking-widest uppercase text-saffron/60">
               42.3601°N, 71.0589°W
             </span>
@@ -97,9 +97,9 @@ export default function FooterSection() {
         </div>
 
         {/* Middle Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 border-b border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-2 border-b border-black/50">
           {/* Statement */}
-          <div className="footer-mod p-8 md:p-12 flex flex-col justify-between border-b md:border-b-0 md:border-r border-white/5 group relative overflow-hidden min-h-[280px]">
+          <div className="footer-mod p-8 md:p-12 flex flex-col justify-between border-b md:border-b-0 md:border-r border-black/50 group relative overflow-hidden min-h-[280px]">
             <div className="absolute inset-0 bg-saffron/3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             <p className="font-display text-xl md:text-3xl leading-[1.15] tracking-tight max-w-md text-parchment/90 relative z-10">
               Step into the architecture of tomorrow — where code becomes material and design becomes dialogue.
@@ -108,7 +108,7 @@ export default function FooterSection() {
               {['IG', 'TW', 'LI', 'GH'].map((social) => (
                 <div
                   key={social}
-                  className="w-9 h-9 border border-white/10 flex items-center justify-center hover:bg-saffron hover:text-obsidian hover:border-saffron transition-all duration-500 cursor-pointer"
+                  className="w-9 h-9 border border-black/50 flex items-center justify-center hover:bg-saffron hover:text-parchment hover:border-saffron transition-all duration-500 cursor-pointer"
                 >
                   <span className="font-mono text-[8px]">{social}</span>
                 </div>
@@ -133,7 +133,7 @@ export default function FooterSection() {
             <div className="mt-10">
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="relative overflow-hidden group/btn px-7 py-3.5 border border-saffron/20 text-saffron font-mono text-[9px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian"
+                className="relative overflow-hidden group/btn px-7 py-3.5 border border-saffron/80 text-saffron font-mono text-[9px] uppercase tracking-widest transition-all duration-500 hover:text-parchment"
               >
                 <div className="absolute inset-0 bg-saffron translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10">Start a Project</span>
@@ -143,7 +143,7 @@ export default function FooterSection() {
         </div>
 
         {/* Marquee */}
-        <div className="footer-mod border-b border-white/5 overflow-hidden bg-saffron text-obsidian relative py-5">
+        <div className="footer-mod border-b border-black/50 overflow-hidden bg-saffron text-parchment relative py-5">
           <div className="absolute inset-0 opacity-[0.1] pointer-events-none mix-blend-overlay"
             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
           />
@@ -170,7 +170,7 @@ export default function FooterSection() {
               Indraam{' '}
               <span
                 className="text-transparent transition-colors duration-700 group-hover/logo:text-saffron/20"
-                style={{ WebkitTextStroke: '1.5px rgba(244, 241, 222, 0.15)' }}
+                style={{ WebkitTextStroke: '1.5px rgba(26, 26, 26, 0.15)' }}
               >
                 Studio
               </span>
@@ -187,7 +187,7 @@ export default function FooterSection() {
               className="flex flex-col items-center justify-center cursor-pointer hover:text-saffron transition-colors group/totop"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-              <div className="w-px h-6 bg-white/15 mb-2 relative overflow-hidden">
+              <div className="w-px h-6 bg-black/15 mb-2 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-saffron -translate-y-full group-hover/totop:translate-y-0 transition-transform duration-500 ease-out" />
               </div>
               <span className="font-mono text-[8px] uppercase tracking-widest">Top</span>

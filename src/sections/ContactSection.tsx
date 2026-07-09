@@ -101,49 +101,49 @@ export default function ContactSection() {
             >
               <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                  <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-parchment mb-3">
                     Your Name
                   </label>
                   <input
                     required
                     type="text"
                     placeholder="John Doe"
-                    className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500"
+                    className="w-full bg-transparent border-b border-black/50 pb-4 text-parchment text-lg placeholder:text-parchment/40 focus:border-saffron focus:outline-none transition-colors duration-500"
                   />
                 </div>
                 <div>
-                  <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                  <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-parchment mb-3">
                     Email
                   </label>
                   <input
                     required
                     type="email"
                     placeholder="john@company.com"
-                    className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500"
+                    className="w-full bg-transparent border-b border-black/50 pb-4 text-parchment text-lg placeholder:text-parchment/40 focus:border-saffron focus:outline-none transition-colors duration-500"
                   />
                 </div>
               </div>
 
               <div className="form-field">
-                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-parchment mb-3">
                   Company
                 </label>
                 <input
                   type="text"
                   placeholder="Your company name"
-                  className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500"
+                  className="w-full bg-transparent border-b border-black/50 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/80 focus:outline-none transition-colors duration-500"
                 />
               </div>
 
               <div className="form-field">
-                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-parchment mb-3">
                   What can we help with?
                 </label>
                 <div className="flex flex-wrap gap-3 mb-8">
                   {['Agentic AI', 'Web App', 'Mobile App', 'Computer Vision', 'Data Pipeline', 'Other'].map((tag) => (
                     <label key={tag} className="group cursor-pointer">
                       <input type="checkbox" className="sr-only peer" />
-                      <span className="inline-block px-5 py-3 border border-white/10 font-mono text-[10px] uppercase tracking-widest text-fog/40 peer-checked:border-saffron/50 peer-checked:text-saffron peer-checked:bg-saffron/5 hover:border-white/20 hover:text-fog/60 transition-all duration-300">
+                      <span className="inline-block px-5 py-3 border border-black/50 font-mono text-[10px] uppercase tracking-widest text-parchment/70 peer-checked:border-saffron peer-checked:text-saffron peer-checked:bg-saffron/10 hover:border-black/60 hover:text-parchment transition-all duration-300">
                         {tag}
                       </span>
                     </label>
@@ -152,20 +152,20 @@ export default function ContactSection() {
               </div>
 
               <div className="form-field">
-                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/40 mb-3">
+                <label className="block font-mono text-[9px] uppercase tracking-[0.3em] text-parchment mb-3">
                   Tell us about your project
                 </label>
                 <textarea
                   rows={4}
                   placeholder="Describe your vision..."
-                  className="w-full bg-transparent border-b border-white/10 pb-4 text-parchment text-lg placeholder:text-fog/20 focus:border-saffron/50 focus:outline-none transition-colors duration-500 resize-none"
+                  className="w-full bg-transparent border-b border-black/50 pb-4 text-parchment text-lg placeholder:text-parchment/40 focus:border-saffron focus:outline-none transition-colors duration-500 resize-none"
                 />
               </div>
 
               <div className="form-field pt-4">
                 <button
                   type="submit"
-                  className="group relative inline-flex items-center gap-4 px-10 py-5 min-h-[48px] bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_60px_rgba(242,204,143,0.2)]"
+                  className="group relative inline-flex items-center gap-4 px-10 py-5 min-h-[48px] bg-saffron text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_60px_rgba(242,204,143,0.2)]"
                 >
                   <div className="absolute inset-0 bg-parchment translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-600 ease-out" />
                   <span className="relative z-10 font-bold">Send Message</span>
@@ -183,7 +183,7 @@ export default function ContactSection() {
             <div className="lg:sticky lg:top-32 space-y-10">
               {/* Email */}
               <div className="group">
-                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron/50 mb-3">Email</span>
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron mb-3">Email</span>
                 <a href="mailto:hello@indraam.com" className="font-display text-2xl lg:text-3xl text-parchment hover:text-saffron transition-colors duration-500">
                   hello@indraam.com
                 </a>
@@ -192,7 +192,7 @@ export default function ContactSection() {
 
               {/* Phone */}
               <div className="group">
-                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron/50 mb-3">Phone</span>
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron mb-3">Phone</span>
                 <a href="tel:+12036402437" className="font-display text-xl text-parchment/80 hover:text-saffron transition-colors duration-500">
                   +1 (203) 640-2437
                 </a>
@@ -200,8 +200,8 @@ export default function ContactSection() {
 
               {/* Location */}
               <div>
-                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron/50 mb-3">Location</span>
-                <p className="font-body text-fog/60 text-sm leading-relaxed">
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-saffron mb-3">Location</span>
+                <p className="font-body text-parchment/70 text-sm leading-relaxed">
                   United States<br />
                   Available worldwide
                 </p>
@@ -209,19 +209,19 @@ export default function ContactSection() {
 
               {/* Quick CTA buttons */}
               <div className="flex flex-col gap-3 pt-4">
-                <a href="tel:+12036402437" className="group flex items-center justify-between px-6 py-4 border border-white/10 hover:border-saffron/30 transition-all duration-500">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-fog/60 group-hover:text-parchment transition-colors">
+                <a href="tel:+12036402437" className="group flex items-center justify-between px-6 py-4 border border-black/50 hover:border-saffron transition-all duration-500">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-parchment/70 group-hover:text-parchment transition-colors">
                     Schedule a Call
                   </span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-fog/30 group-hover:text-saffron transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-parchment/50 group-hover:text-saffron transition-colors">
                     <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                   </svg>
                 </a>
-                <a href="mailto:hello@indraam.com" className="group flex items-center justify-between px-6 py-4 border border-white/10 hover:border-saffron/30 transition-all duration-500">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-fog/60 group-hover:text-parchment transition-colors">
+                <a href="mailto:hello@indraam.com" className="group flex items-center justify-between px-6 py-4 border border-black/50 hover:border-saffron transition-all duration-500">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-parchment/70 group-hover:text-parchment transition-colors">
                     Email Us
                   </span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-fog/30 group-hover:text-saffron transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-parchment/50 group-hover:text-saffron transition-colors">
                     <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                   </svg>
                 </a>
@@ -229,12 +229,12 @@ export default function ContactSection() {
 
               {/* Social */}
               <div className="pt-4">
-                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-fog/20 mb-4">Follow</span>
+                <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-parchment/60 mb-4">Follow</span>
                 <div className="flex gap-3">
                   {['IG', 'TW', 'LI', 'GH'].map((social) => (
                     <div
                       key={social}
-                      className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-saffron hover:text-obsidian hover:border-saffron hover:scale-110 transition-all duration-500 cursor-pointer"
+                      className="w-10 h-10 border border-black/50 flex items-center justify-center hover:bg-saffron hover:text-parchment hover:border-saffron hover:scale-110 transition-all duration-500 cursor-pointer"
                     >
                       <span className="font-mono text-[9px]">{social}</span>
                     </div>

@@ -123,12 +123,12 @@ export default function ServicesSection() {
               {/* Desktop: list + active indicator + accordion behavior handled by right panel */}
               <div className="hidden lg:block">
                 {services.map((service, i) => (
-                  <div key={service.num} className="flex flex-col border-b border-white/5">
+                  <div key={service.num} className="flex flex-col border-b border-black/50">
                     <div
                       className={`service-item group flex items-center gap-6 py-5 cursor-pointer transition-all duration-500 ${
                         activeService === i
-                          ? 'lg:border-saffron/30'
-                          : 'hover:border-white/15'
+                          ? 'lg:border-saffron/80'
+                          : 'hover:border-black/60'
                       }`}
                       onMouseEnter={() => window.innerWidth >= 1024 && setActiveService(i)}
                       onClick={() => setSelectedService(service.title)}
@@ -177,7 +177,7 @@ export default function ServicesSection() {
                 {services.map((service) => (
                   <div
                     key={service.num}
-                    className="service-mosaic-card group relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.01] px-6 py-6"
+                    className="service-mosaic-card group relative overflow-hidden rounded-xl border border-black/50 bg-black/[0.01] px-6 py-6"
                   >
                     {/* subtle hover sheen (mobile-safe) */}
                     <div className="absolute inset-0 bg-gradient-to-r from-saffron/0 via-saffron/10 to-saffron/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -202,7 +202,7 @@ export default function ServicesSection() {
                         <div className="mt-4">
                           <button
                             onClick={() => setSelectedService(service.title)}
-                            className="group relative inline-flex items-center gap-3 px-5 py-3 min-h-[44px] border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
+                            className="group relative inline-flex items-center gap-3 px-5 py-3 min-h-[44px] border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-parchment overflow-hidden"
                           >
                             <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <span className="relative z-10">Request</span>
@@ -225,10 +225,10 @@ export default function ServicesSection() {
             <div className="lg:sticky lg:top-32">
               <div
                 ref={detailRef}
-                className="relative border border-white/5 bg-white/[0.01] lg:backdrop-blur-sm p-10 lg:p-14 overflow-hidden"
+                className="relative border border-black/50 bg-black/[0.01] lg:backdrop-blur-sm p-10 lg:p-14 overflow-hidden"
               >
                 {/* Background number */}
-                <div className="absolute top-0 right-0 font-display text-[200px] leading-none text-white/[0.02] pointer-events-none select-none -mt-8 -mr-4">
+                <div className="absolute top-0 right-0 font-display text-[200px] leading-none text-black/[0.02] pointer-events-none select-none -mt-8 -mr-4">
                   {active.num}
                 </div>
 
@@ -256,7 +256,7 @@ export default function ServicesSection() {
 
                   <button
                     onClick={() => setSelectedService(active.title)}
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian overflow-hidden"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-parchment overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                     <span className="relative z-10">Request Expertise</span>
@@ -277,7 +277,7 @@ export default function ServicesSection() {
       {selectedService && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-obsidian/95 backdrop-blur-xl">
           <div className="absolute inset-0 cursor-pointer" onClick={() => setSelectedService(null)} />
-          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-ink border border-white/10 p-6 md:p-12 shadow-2xl">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-ink border border-black/50 p-6 md:p-12 shadow-2xl">
             <button
               onClick={() => setSelectedService(null)}
               className="absolute top-6 right-6 text-fog hover:text-saffron transition-colors"
@@ -294,7 +294,7 @@ export default function ServicesSection() {
                   name="service"
                   value={selectedService}
                   onChange={(e) => setSelectedService(e.target.value)}
-                  className="w-full bg-transparent border-b border-white/20 pb-2 text-saffron font-mono text-[16px] md:text-[11px] uppercase tracking-widest focus:border-saffron focus:outline-none transition-colors appearance-none cursor-pointer"
+                  className="w-full bg-transparent border-b border-black/50 pb-2 text-saffron font-mono text-[16px] md:text-[11px] uppercase tracking-widest focus:border-saffron focus:outline-none transition-colors appearance-none cursor-pointer"
                 >
                   {services.map((s) => (
                     <option key={s.num} value={s.title} className="bg-obsidian text-parchment">
@@ -305,22 +305,22 @@ export default function ServicesSection() {
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Name</label>
-                <input name="name" required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="name" required type="text" className="w-full bg-transparent border-b border-black/50 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Business Name</label>
-                <input name="businessName" required type="text" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="businessName" required type="text" className="w-full bg-transparent border-b border-black/50 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Contact Number</label>
-                <input name="contactNumber" required type="tel" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="contactNumber" required type="tel" className="w-full bg-transparent border-b border-black/50 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
               <div>
                 <label className="block font-mono text-[9px] uppercase tracking-widest text-fog/60 mb-2">Email</label>
-                <input name="email" required type="email" className="w-full bg-transparent border-b border-white/20 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
+                <input name="email" required type="email" className="w-full bg-transparent border-b border-black/50 pb-2 text-[16px] md:text-sm text-parchment focus:border-saffron focus:outline-none transition-colors" />
               </div>
 
-              <button type="submit" className="w-full mt-8 relative overflow-hidden group/btn px-8 py-4 border border-saffron/30 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-obsidian">
+              <button type="submit" className="w-full mt-8 relative overflow-hidden group/btn px-8 py-4 border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-parchment">
                 <div className="absolute inset-0 bg-saffron translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-expo" />
                 <span className="relative z-10">Submit Request</span>
               </button>

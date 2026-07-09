@@ -142,14 +142,12 @@ export default function FlowingNodeGraph() {
           )}
           
           <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%" stopColor="rgba(242, 204, 143, 0.15)" />
+            <stop offset="0%" stopColor="rgba(184, 134, 11, 0.4)" />
             <stop offset="100%" stopColor="rgba(5, 4, 1, 0.8)" />
           </radialGradient>
         </defs>
 
-        {/* Ambient background rings */}
-        <circle cx="250" cy="250" r="170" className="ambient-ring fill-none stroke-white/[0.03]" strokeWidth="1" strokeDasharray="4 8" />
-        <circle cx="250" cy="250" r="220" className="ambient-ring fill-none stroke-white/[0.02]" strokeWidth="1" strokeDasharray="10 20" />
+        {/* Ambient background rings removed */}
 
         {/* Background connections */}
         <g className="connections">
@@ -159,8 +157,8 @@ export default function FlowingNodeGraph() {
               <line
                 x1={centerNode.x} y1={centerNode.y}
                 x2={node.x} y2={node.y}
-                stroke="rgba(242, 204, 143, 0.2)"
-                strokeWidth="1"
+                stroke="rgba(184, 134, 11, 0.6)"
+                strokeWidth="1.5"
               />
               
               {/* Animated pulse — GSAP on desktop, CSS on mobile */}
@@ -197,14 +195,14 @@ export default function FlowingNodeGraph() {
             {/* Outer ring */}
             <circle
               cx={node.x} cy={node.y} r={isMobile ? 28 : 32}
-              className="fill-obsidian stroke-saffron/30 group-hover/node:stroke-saffron/60 transition-all duration-500"
-              strokeWidth="1.5"
+              className="fill-obsidian stroke-saffron/70 group-hover/node:stroke-saffron transition-all duration-500"
+              strokeWidth="2"
             />
             
             {/* Inner circle */}
             <circle
               cx={node.x} cy={node.y} r={isMobile ? 22 : 26}
-              className="fill-saffron/8 stroke-saffron/15"
+              className="fill-saffron/15 stroke-saffron/40"
             />
             
             {/* Icon */}
@@ -237,13 +235,13 @@ export default function FlowingNodeGraph() {
           {/* Main Hub */}
           <circle
             cx={centerNode.x} cy={centerNode.y} r="48"
-            className="fill-obsidian stroke-saffron/40"
-            strokeWidth="1.5"
+            className="fill-obsidian stroke-saffron/80"
+            strokeWidth="2"
           />
           
           <circle
             cx={centerNode.x} cy={centerNode.y} r="42"
-            className="fill-saffron/10 stroke-saffron/20"
+            className="fill-saffron/20 stroke-saffron/50"
             strokeWidth="1"
           />
 
@@ -260,8 +258,7 @@ export default function FlowingNodeGraph() {
             ))}
           </text>
           
-          {/* Center decorative point */}
-          <circle cx={centerNode.x} cy={centerNode.y} r="2" fill="var(--saffron)" />
+          {/* Center decorative point removed */}
         </g>
       </svg>
     </div>

@@ -145,7 +145,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
                   <span
                     className="word inline-block"
                     style={{
-                      color: 'rgba(244, 241, 222, 0.92)',
+                      color: 'rgba(26, 26, 26, 0.92)',
                       WebkitTextStroke: '1.5px rgba(242, 204, 143, 0.55)',
                     }}
                   >
@@ -170,7 +170,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             {/* Subtitle */}
             <p
               ref={subtitleRef}
-              className="font-body text-fog/50 text-base lg:text-lg leading-relaxed max-w-lg mb-10 border-l-2 border-saffron/20 pl-6"
+              className="font-body text-fog/50 text-base lg:text-lg leading-relaxed max-w-lg mb-10 border-l-2 border-saffron/80 pl-6"
             >
               From <span className="text-parchment/80">Agentic AI</span> to full-stack applications —
               we architect digital ecosystems that don't just run, they <span className="text-saffron/80 italic">reason</span>.
@@ -180,7 +180,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
             <div ref={ctaRef} className="flex flex-col md:flex-row items-stretch md:items-center gap-5 md:gap-4">
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full md:w-auto flex justify-center group relative px-8 py-4 bg-saffron text-obsidian font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(242,204,143,0.3)]"
+                className="w-full md:w-auto flex justify-center group relative px-8 py-4 bg-saffron text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(242,204,143,0.3)]"
               >
                 <div className="absolute inset-0 bg-parchment translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10 flex items-center gap-3 font-bold">
@@ -194,7 +194,7 @@ export default function HeroSection({ entranceComplete }: HeroSectionProps) {
 
               <button
                 onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full md:w-auto flex justify-center group relative px-8 py-4 border border-white/15 text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:border-saffron/50"
+                className="w-full md:w-auto flex justify-center group relative px-8 py-4 border border-black/50 text-parchment font-mono text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 hover:border-saffron"
               >
                 <div className="absolute inset-0 bg-saffron/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                 <span className="relative z-10 flex items-center gap-3">

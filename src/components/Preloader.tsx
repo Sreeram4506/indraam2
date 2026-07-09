@@ -150,7 +150,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         </div>
 
         {/* Progress line */}
-        <div className="mt-12 w-48 h-[1px] bg-white/10 relative overflow-hidden">
+        <div className="mt-12 w-48 h-[1px] bg-black/10 relative overflow-hidden">
           <div
             ref={lineRef}
             className="absolute inset-0 bg-saffron origin-left"

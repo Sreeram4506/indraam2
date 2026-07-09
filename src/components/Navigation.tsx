@@ -131,7 +131,7 @@ export default function Navigation({ visible }: NavigationProps) {
               className={`relative font-mono text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group ${
                 activeSection === item.id
                   ? 'text-saffron'
-                  : 'text-fog/40 hover:text-parchment'
+                  : 'text-fog/80 hover:text-parchment'
               }`}
             >
               {item.label}
@@ -163,7 +163,7 @@ export default function Navigation({ visible }: NavigationProps) {
               className={`relative font-mono text-[9px] uppercase tracking-[0.2em] transition-all duration-300 group ${
                 activeSection === item.id
                   ? 'text-saffron'
-                  : 'text-fog/40 hover:text-parchment'
+                  : 'text-fog/80 hover:text-parchment'
               }`}
             >
               {item.label}
@@ -215,7 +215,7 @@ export default function Navigation({ visible }: NavigationProps) {
             key={item.id}
             onClick={() => scrollTo(item.id)}
             className={`font-display text-[clamp(36px,10vw,56px)] tracking-wider transition-all duration-500 ${
-              activeSection === item.id ? 'text-saffron' : 'text-parchment/60 hover:text-parchment'
+              activeSection === item.id ? 'text-saffron' : 'text-parchment/80 hover:text-parchment'
             }`}
             style={{
               transitionDelay: menuOpen ? `${i * 80}ms` : '0ms',
@@ -231,10 +231,10 @@ export default function Navigation({ visible }: NavigationProps) {
           opacity: menuOpen ? 1 : 0,
           transition: 'opacity 0.5s ease',
         }}>
-          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/40">
+          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/80">
             hello@indraam.com
           </span>
-          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-fog/30">
+          <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-fog/70">
             Est. 2026 // US Based
           </span>
         </div>

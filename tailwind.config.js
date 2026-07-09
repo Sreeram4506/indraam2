@@ -5,14 +5,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        obsidian: '#050401',
-        parchment: '#F4F1DE',
-        saffron: '#F2CC8F',
-        terracotta: '#E07A5F',
-        sage: '#81B29A',
-        fog: '#CAD2C5',
-        night: '#0A0A0A',
-        ink: '#1A1A1A',
+        obsidian: '#FAFAF7',
+        parchment: '#111111',
+        saffron: '#B8860B', // Dark Gold
+        terracotta: '#9A3412',
+        sage: '#166534',
+        fog: '#000000', // Pure Black
+        night: '#F3F3EF',
+        ink: '#EAEAE4',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

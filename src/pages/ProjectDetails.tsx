@@ -51,7 +51,7 @@ export default function ProjectDetails() {
 
       <button
         onClick={() => navigate('/')}
-        className="absolute top-12 left-6 md:left-20 text-saffron font-mono text-[10px] uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2 z-20 cursor-pointer"
+        className="absolute top-12 left-6 md:left-20 text-saffron font-mono text-[10px] uppercase tracking-widest hover:text-parchment transition-colors flex items-center gap-2 z-20 cursor-pointer"
       >
         <span className="text-lg" aria-hidden="true">
           &larr;
@@ -78,18 +78,18 @@ export default function ProjectDetails() {
             <br />
             This project represents a synthesis of spatial logic and experiential design. By focusing on atmospheric lighting and seamless material transitions, we created an environment that feels both grounded and deeply futuristic.
           </p>
-          <div className="border border-white/10 p-8 backdrop-blur-sm bg-white/5">
+          <div className="border border-black/50 p-8 backdrop-blur-sm bg-black/5">
             <h3 className="font-mono text-[10px] uppercase tracking-widest text-saffron mb-4">Project Overview</h3>
             <ul className="space-y-4 font-body text-fog/60">
-              <li className="flex justify-between border-b border-white/5 pb-2">
+              <li className="flex justify-between border-b border-black/50 pb-2">
                 <span>Status</span>
                 <span className="text-parchment">Completed</span>
               </li>
-              <li className="flex justify-between border-b border-white/5 pb-2">
+              <li className="flex justify-between border-b border-black/50 pb-2">
                 <span>Year</span>
                 <span className="text-parchment">2026</span>
               </li>
-              <li className="flex justify-between border-b border-white/5 pb-2">
+              <li className="flex justify-between border-b border-black/50 pb-2">
                 <span>Core Focus</span>
                 <span className="text-parchment" style={{ color: project.color }}>
                   {project.category.split(' / ')[0]}
@@ -99,7 +99,7 @@ export default function ProjectDetails() {
           </div>
         </div>
 
-        <div className="w-full aspect-[16/9] border border-white/10 relative overflow-hidden">
+        <div className="w-full aspect-[16/9] border border-black/50 relative overflow-hidden">
           <div className="w-full h-full bg-gradient-to-br from-obsidian via-ink to-obsidian/90 flex flex-col items-center justify-center text-center px-6">
             <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-saffron/70 mb-3">
               Project Visual

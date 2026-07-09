@@ -165,7 +165,7 @@ export default function PhilosophySection() {
           gsap.fromTo(el,
             { opacity: 0, y: 40 },
             {
-              opacity: 0.25,
+              opacity: 1,
               y: 0,
               duration: 1.2,
               ease: 'power3.out',
@@ -181,7 +181,7 @@ export default function PhilosophySection() {
           gsap.fromTo(el,
             { opacity: 0, x: xMove, scale: 0.9, filter: 'blur(8px)' },
             {
-              opacity: 0.6, x: 0, scale: 1, filter: 'blur(0px)',
+              opacity: 1, x: 0, scale: 1, filter: 'blur(0px)',
               ease: 'none',
               scrollTrigger: {
                 trigger: el,
@@ -246,7 +246,7 @@ export default function PhilosophySection() {
             We believe the best technology is the kind you <span className="text-saffron italic">don't notice</span> — until you realize everything just <span className="text-saffron italic">works</span>.
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-white/10 pt-12 max-w-4xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-black/50 pt-12 max-w-4xl">
             <p className="phi-desc font-body text-parchment/80 text-lg leading-relaxed">
               We dismantle traditional workflows to build something more resilient. Every project is a dialogue between technology and human experience.
             </p>
@@ -262,7 +262,7 @@ export default function PhilosophySection() {
             <div
               key={p.num}
               ref={(el) => { principlesRef.current[i] = el; }}
-              className="group relative border border-white/5 p-8 lg:p-10 hover:border-saffron/30 transition-all duration-700 bg-white/[0.01] lg:backdrop-blur-sm overflow-hidden"
+              className="group relative border border-black/50 p-8 lg:p-10 hover:border-saffron transition-all duration-700 bg-black/[0.01] lg:backdrop-blur-sm overflow-hidden"
             >
               {/* Hover fill effect */}
               <div className="absolute inset-0 bg-saffron/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-out" />
@@ -308,7 +308,7 @@ export default function PhilosophySection() {
               className={`relative ${word.pos === 'right' ? 'self-end text-right' : 'self-start text-left'}`}
             >
               <span
-                className="font-display text-white select-none pointer-events-none opacity-30 hover:opacity-10 transition-opacity duration-1000"
+                className="font-display text-parchment select-none pointer-events-none opacity-80 hover:opacity-100 transition-opacity duration-1000"
                 style={{
                   fontSize: 'clamp(70px, 18vw, 250px)',
                   letterSpacing: '-0.02em',

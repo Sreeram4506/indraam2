@@ -91,7 +91,7 @@ const ParticleText: React.FC<ParticleTextProps> = ({
               vx: 0,
               vy: 0,
               size: 2.5, // Uniform size larger than the gap to form a solid block
-              color: '#F4F1DE',
+              color: '#1A1A1A',
               ease: 0.02 + Math.random() * 0.04, 
             });
           }
@@ -167,7 +167,7 @@ const ParticleText: React.FC<ParticleTextProps> = ({
             
             p.color = '#F2CC8F'; // Accent color when disturbed
           } else {
-            p.color = '#F4F1DE'; // Normal solid color
+            p.color = '#1A1A1A'; // Normal solid color
           }
 
           // HIGHLY DAMPED SPRING PHYSICS

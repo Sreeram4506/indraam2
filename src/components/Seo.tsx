@@ -55,7 +55,7 @@ export default function Seo({
     upsertMeta('name', 'keywords', keywords.join(', '));
     upsertMeta('name', 'robots', robots);
     upsertMeta('name', 'author', 'Indraam');
-    upsertMeta('name', 'theme-color', '#050401');
+    upsertMeta('name', 'theme-color', '#FAFAF7');
     upsertMeta('property', 'og:title', title);
     upsertMeta('property', 'og:description', description);
     upsertMeta('property', 'og:type', type);
