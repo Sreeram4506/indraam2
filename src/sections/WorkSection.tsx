@@ -371,8 +371,8 @@ export default function WorkSection() {
                 
                 <div className="relative w-full h-full overflow-hidden border border-black/50 group-hover:border-black/60 transition-colors duration-700">
                   <div className="portfolio-media w-full h-full bg-gradient-to-br from-obsidian via-ink to-obsidian/90 flex flex-col items-center justify-center text-center px-6 will-change-transform">
-                    <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-saffron/70 mb-3">Portfolio</span>
-                    <span className="font-display text-[clamp(26px,4vw,52px)] leading-none text-parchment">Coming Soon</span>
+                    <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-fog mb-3">Portfolio</span>
+                    <span className="font-display text-[clamp(26px,4vw,52px)] leading-none text-saffron">Coming Soon</span>
                   </div>
                   
                   {/* Scanline / Grain Overlay */}

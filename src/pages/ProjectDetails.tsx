@@ -101,10 +101,10 @@ export default function ProjectDetails() {
 
         <div className="w-full aspect-[16/9] border border-black/50 relative overflow-hidden">
           <div className="w-full h-full bg-gradient-to-br from-obsidian via-ink to-obsidian/90 flex flex-col items-center justify-center text-center px-6">
-            <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-saffron/70 mb-3">
+            <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-fog mb-3">
               Project Visual
             </span>
-            <span className="font-display text-[clamp(28px,4vw,56px)] leading-none text-parchment">
+            <span className="font-display text-[clamp(28px,4vw,56px)] leading-none text-saffron">
               Coming Soon
             </span>
           </div>

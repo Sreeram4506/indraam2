@@ -254,7 +254,7 @@ export default function FlowingNodeGraph() {
             style={{ fontSize: isMobile ? '16px' : '9px' }}
           >
             {centerNode.title.split(' ').map((word, i) => (
-              <tspan key={i} x={centerNode.x} dy={i === 0 ? '-0.3em' : '1.2em'}>{word}</tspan>
+              <tspan key={i} x={centerNode.x} dy={i === 0 ? (isMobile ? '-0.5em' : '-0.3em') : (isMobile ? '1.4em' : '1.2em')}>{word}</tspan>
             ))}
           </text>
           
