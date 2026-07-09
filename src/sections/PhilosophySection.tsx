@@ -179,9 +179,9 @@ export default function PhilosophySection() {
           // Desktop scrub with filter blur
           const xMove = i % 2 === 0 ? -120 : 120;
           gsap.fromTo(el,
-            { opacity: 0, x: xMove, scale: 0.9, filter: 'blur(8px)' },
+            { opacity: 0, x: xMove, scale: 0.9 },
             {
-              opacity: 1, x: 0, scale: 1, filter: 'blur(0px)',
+              opacity: 1, x: 0, scale: 1,
               ease: 'none',
               scrollTrigger: {
                 trigger: el,
@@ -308,7 +308,7 @@ export default function PhilosophySection() {
               className={`relative ${word.pos === 'right' ? 'self-end text-right' : 'self-start text-left'}`}
             >
               <span
-                className="font-display text-parchment select-none pointer-events-none opacity-80 hover:opacity-100 transition-opacity duration-1000"
+                className="font-display text-fog font-bold select-none pointer-events-none transition-opacity duration-1000"
                 style={{
                   fontSize: 'clamp(70px, 18vw, 250px)',
                   letterSpacing: '-0.02em',
