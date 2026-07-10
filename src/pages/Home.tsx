@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useLenis } from '../hooks/useLenis';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navigation from '../components/Navigation';
 import HeroSection from '../sections/HeroSection';
-import PhilosophySection from '../sections/PhilosophySection';
-import ServicesSection from '../sections/ServicesSection';
-import WorkSection from '../sections/WorkSection';
-import ContactSection from '../sections/ContactSection';
-import FooterSection from '../sections/FooterSection';
 import CustomCursor from '../components/CustomCursor';
 import Preloader from '../components/Preloader';
 import Seo from '../components/Seo';
 import { homeKeywords } from '../data/seo';
+
+const PhilosophySection = lazy(() => import('../sections/PhilosophySection'));
+const ServicesSection = lazy(() => import('../sections/ServicesSection'));
+const WorkSection = lazy(() => import('../sections/WorkSection'));
+const ContactSection = lazy(() => import('../sections/ContactSection'));
+const FooterSection = lazy(() => import('../sections/FooterSection'));
 
 export default function Home() {
   const [preloaderDone, setPreloaderDone] = useState(() => {
@@ -89,11 +90,13 @@ export default function Home() {
 
       <main>
         <HeroSection entranceComplete={entranceComplete} />
-        <PhilosophySection />
-        <ServicesSection />
-        <WorkSection />
-        <ContactSection />
-        <FooterSection />
+        <Suspense fallback={null}>
+          <PhilosophySection />
+          <ServicesSection />
+          <WorkSection />
+          <ContactSection />
+          <FooterSection />
+        </Suspense>
       </main>
     </div>
   );

@@ -106,6 +106,18 @@ export default function Navigation({ visible }: NavigationProps) {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
+  // Close mobile menu when switching to desktop view
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [menuOpen]);
+
   const navItems = [
     { label: 'Philosophy', id: 'philosophy' },
     { label: 'Services', id: 'services' },
@@ -116,9 +128,9 @@ export default function Navigation({ visible }: NavigationProps) {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 opacity-0 -translate-y-2 transition-all duration-700 bg-transparent ${
+      className={`fixed top-0 left-0 right-0 z-[70] opacity-0 -translate-y-2 transition-all duration-700 border-b border-white/10 bg-obsidian/95 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-md ${
         scrolled ? 'py-2' : 'py-4'
-      }`}
+      } ${menuOpen ? 'bg-obsidian' : ''}`}
       style={{ padding: '0 5vw' }}
     >
       <div className="flex items-center justify-between h-16 relative">
@@ -206,10 +218,12 @@ export default function Navigation({ visible }: NavigationProps) {
         </button>
       </div>
 
-      {/* Mobile Menu — no backdrop-blur, solid bg for performance */}
-      <div className={`md:hidden fixed inset-0 bg-obsidian flex flex-col items-center justify-center gap-2 transition-all duration-500 pb-safe ${
-        menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-      }`}>
+      {/* Mobile Menu — renders as a full-height overlay below the navbar */}
+      <div
+        className={`md:hidden fixed inset-x-0 top-16 h-[calc(100dvh-4rem)] z-[60] flex flex-col items-center justify-center gap-2 overflow-y-auto bg-obsidian px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-all duration-500 ${
+          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
         {navItems.map((item, i) => (
           <button
             key={item.id}
@@ -227,9 +241,11 @@ export default function Navigation({ visible }: NavigationProps) {
           </button>
         ))}
         <div className="mt-12 flex flex-col items-center gap-3" style={{
+          transitionProperty: 'opacity',
+          transitionDuration: '0.5s',
+          transitionTimingFunction: 'ease',
           transitionDelay: menuOpen ? '400ms' : '0ms',
           opacity: menuOpen ? 1 : 0,
-          transition: 'opacity 0.5s ease',
         }}>
           <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-saffron/80">
             hello@indraam.com

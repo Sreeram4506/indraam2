@@ -179,8 +179,6 @@ export default function ServicesSection() {
                     key={service.num}
                     className="service-mosaic-card group relative overflow-hidden rounded-xl border border-black/50 bg-black/[0.01] px-6 py-6"
                   >
-                    {/* subtle hover sheen (mobile-safe) */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-saffron/0 via-saffron/10 to-saffron/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     <div className="relative z-10 flex items-start gap-4">
                       <div className="text-2xl leading-none">{service.icon}</div>
                       <div className="min-w-0 flex-1">
@@ -202,11 +200,10 @@ export default function ServicesSection() {
                         <div className="mt-4">
                           <button
                             onClick={() => setSelectedService(service.title)}
-                            className="group relative inline-flex items-center gap-3 px-5 py-3 min-h-[44px] border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-parchment overflow-hidden"
+                            className="group inline-flex items-center gap-3 px-5 py-3 min-h-[44px] border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-colors duration-300 hover:text-parchment hover:border-parchment"
                           >
-                            <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <span className="relative z-10">Request</span>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform duration-300">
                               <line x1="5" y1="12" x2="19" y2="12" />
                               <polyline points="12 5 19 12 12 19" />
                             </svg>
@@ -256,11 +253,10 @@ export default function ServicesSection() {
 
                   <button
                     onClick={() => setSelectedService(active.title)}
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-all duration-500 hover:text-parchment overflow-hidden"
+                    className="group inline-flex items-center gap-3 px-8 py-4 border border-saffron/80 text-saffron font-mono text-[10px] uppercase tracking-widest transition-colors duration-300 hover:text-parchment hover:border-parchment"
                   >
-                    <div className="absolute inset-0 bg-saffron translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                     <span className="relative z-10">Request Expertise</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="relative z-10 transform group-hover:translate-x-1 transition-transform duration-300">
                       <line x1="5" y1="12" x2="19" y2="12" />
                       <polyline points="12 5 19 12 12 19" />
                     </svg>
