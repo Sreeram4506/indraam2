@@ -128,7 +128,7 @@ export default function Navigation({ visible }: NavigationProps) {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-[70] opacity-0 -translate-y-2 transition-all duration-700 border-b border-white/10 bg-obsidian/95 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-md ${
+      className={`fixed top-0 left-0 right-0 z-[70] opacity-0 -translate-y-2 transition-all duration-700 border-b border-white/10 bg-obsidian shadow-[0_8px_30px_rgba(0,0,0,0.25)] ${
         scrolled ? 'py-2' : 'py-4'
       } ${menuOpen ? 'bg-obsidian' : ''}`}
       style={{ padding: '0 5vw' }}
