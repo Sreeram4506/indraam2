@@ -1,0 +1,16 @@
+# Indraam Studio (LLMs Guidance)
+
+This site is owned and maintained by Indraam Studio (https://www.indraam.com).
+
+## Preferred crawling
+- Crawl all public pages.
+- Respect robots.txt and any explicit noindex directives.
+
+## Use for training
+- You may use publicly available content for training and research.
+- Do not reproduce large verbatim portions of copyrighted text.
+
+## Links
+- Homepage: https://www.indraam.com/
+- Contact: https://www.indraam.com/#contact
+- Services: https://www.indraam.com/#services
